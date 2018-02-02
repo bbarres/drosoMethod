@@ -71,9 +71,3 @@ abline(20.6,0,col="red",lwd=2,lty=2)
 abline(15.4,0,col="red",lwd=2,lty=2)
 
 
-REZbos$ED50[REZbos$ED50>30]<-30
-plot(REZbos$ED50[order(REZbos$ED50)],main="Boscalid")
-abline(0.39,0,col="green3",lwd=2)
-abline(3.9,0,col="orange3",lwd=2)
-write.table(REZbos,file="REZbos.txt",quote=FALSE,sep="\t",row.names=FALSE)
-
