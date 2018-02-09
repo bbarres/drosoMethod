@@ -25,7 +25,12 @@ dataDroz<-cbind(dataDroz,"repet"=paste(dataDroz$date,dataDroz$sexe))
 #let's sum the total number of individual tested and total number of 
 #dead individual for each date
 checkdat<-aggregate(cbind(dead,total)~date+sexe+repet,data=dataDroz,"sum")
+checkdat<-checkdat[order(checkdat$repet),]
 plot(checkdat)
+
+
+#XXXXXhere put the general models for pooled male and female
+
 
 #let's do a model for every repetition
 droz_mod<-drm(dead/total~dose,weights=total,
@@ -38,14 +43,13 @@ rez<-ED(droz_mod,50,interval="delta",reference="control")
 write.table(rez,file="rez.txt",quote=FALSE,sep="\t",row.names=TRUE)
 
 
-####après là c'est pas encore terminé
+#another way to do the regression for each repetition is to use a loop######
 
-#another way to do the regression for each repetition is to use a loop
 #first we remove unnecessary levels in the data frame
 dataDroz<-drop.levels(dataDroz)
 #we then create a dataframe for the results
 REZdroz<-data.frame("repet"=as.character(),"ED50"=as.numeric(),
-                    "IC"=as.numeric())
+                    "IC_low"=as.numeric(),"IC_up"=as.numeric())
 #and here comes the loop
 for (i in 1: length(levels(dataDroz$repet))) {
   temp.m1<-drm(dead/total~dose,weights=total,
@@ -54,20 +58,49 @@ for (i in 1: length(levels(dataDroz$repet))) {
                type="binomial")
   temp<-ED(temp.m1,50,interval="delta",reference="control")
   tempx<-data.frame("date"=names(table(dataDroz$repet))[i],
-                    "ED50"=temp[1],"IC"=temp[2])
+                    "ED50"=temp[1],"IC_low"=temp[3],"IC_up"=temp[4])
   REZdroz<-rbind(REZdroz,tempx)
 }
 
+REZdroz<-REZdroz[order(as.character(REZdroz$date)),]
 results<-cbind(checkdat,REZdroz)
 
-plot(results$ED50[results$sexe=="femelle"]~results$total[results$sexe=="femelle"])
-abline(36,0,col="red",lwd=2)
-abline(38,0,col="red",lwd=2,lty=2)
-abline(34,0,col="red",lwd=2,lty=2)
 
-plot(results$ED50[results$sexe=="male"]~results$total[results$sexe=="male"])
-abline(18,0,col="red",lwd=2)
-abline(20.6,0,col="red",lwd=2,lty=2)
-abline(15.4,0,col="red",lwd=2,lty=2)
+#the scatter plot of the LD50 analysis with different number of fly per dose
+
+plot(results$ED50[results$sexe=="femelle"]~results$total[results$sexe=="femelle"],
+     xlab =" Number of tested D. suzukii adults",ylab="LD50 (mg/L)",
+     main="LD50 values function of the number of tested females")
+plotCI(results$total[results$sexe=="femelle"],
+       results$ED50[results$sexe=="femelle"],
+       ui=results$IC_up[results$sexe=="femelle"],
+       li=results$IC_low[results$sexe=="femelle"],
+       add=TRUE)
+abline(39.5964,0,col="red",lwd=2)
+abline(41.9867,0,col="red",lwd=2,lty=2)
+abline(37.2061,0,col="red",lwd=2,lty=2)
+
+
+plot(results$ED50[results$sexe=="male"]~results$total[results$sexe=="male"],
+     xlab =" Number of tested D. suzukii adults",ylab="LD50 (mg/L)",
+     main="LD50 values function of the number of tested males")
+plotCI(results$total[results$sexe=="male"],
+       results$ED50[results$sexe=="male"],
+       ui=results$IC_up[results$sexe=="male"],
+       li=results$IC_low[results$sexe=="male"],
+       add=TRUE)
+abline(19.1237,0,col="red",lwd=2)
+abline(20.887,0,col="red",lwd=2,lty=2)
+abline(17.36,0,col="red",lwd=2,lty=2)
+
+
+
+
+
+
+
+
+
+
 
 
