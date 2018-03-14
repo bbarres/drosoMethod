@@ -12,25 +12,95 @@ library(gdata)
 #set the working directory
 setwd("~/work/Rfichiers/Githuber/droso_data")
 
-
-###############################################################################
-#What is the effect of the number of tested individuals on DL50 evaluation ?
-###############################################################################
-
 #load the dataset
-dataDroz<-read.table("Droso_SF 24-48h phosmet 2016-2017.txt",header=T,sep="\t")
-#creation of variable to distinguish between male and female
-dataDroz<-cbind(dataDroz,"repet"=paste(dataDroz$date,dataDroz$sexe))
+dataDroz<-read.table("droso_data.txt",header=T,sep="\t")
+#creation of variable to distinguish between male and female and time 
+#of exposure to pesticide
+dataDroz<-cbind(dataDroz,"repet"=paste(dataDroz$date,dataDroz$sex, 
+                                       dataDroz$exposition))
+
 
 #let's sum the total number of individual tested and total number of 
 #dead individual for each date
-checkdat<-aggregate(cbind(dead,total)~date+sexe+repet,data=dataDroz,"sum")
+checkdat<-aggregate(cbind(dead,total)~date+sex+repet,data=dataDroz,"sum")
 checkdat<-checkdat[order(checkdat$repet),]
 plot(checkdat)
 
 
-#XXXXXhere put the general models for pooled male and female
+###############################################################################
+#Is there a difference of DL50 between male and female?
+###############################################################################
 
+#we select the data of phosmet test with the St Foy population
+sexdata<-dataDroz[dataDroz$number_comp==1,]
+
+#let's do a model for every repetition
+sex_mod<-drm(dead/total~dose,weights=total,
+             data=sexdata,curveid=sex,
+             fct=LN.3u(),
+             type="binomial")
+plot(sex_mod,type="confidence")
+plot(sex_mod,type="obs",add=TRUE)
+EDcomp(sex_mod,c(50,50))
+sexrez<-ED(sex_mod,50,interval="delta",reference="control")
+
+
+###############################################################################
+#What is the effect of the age of the flies on the DL50?
+###############################################################################
+
+
+
+
+
+###############################################################################
+#What is the effect of the genetic diversity of the tested population on DL50?
+###############################################################################
+
+#we select the data of phosmet test with the St Foy population
+genDdata<-dataDroz[dataDroz$genediv_comp==1,]
+genDdata_f<-genDdata[genDdata$sex=="female",]
+genDdata_m<-genDdata[genDdata$sex=="male",]
+
+#let's model the mortality rate for the female of both populations
+genD_f_mod<-drm(dead/total~dose,weights=total,
+                data=genDdata_f,curveid=population,
+                fct=LN.3u(),
+                type="binomial")
+plot(genD_f_mod,type="confidence")
+plot(genD_f_mod,type="obs",add=TRUE)
+EDcomp(genD_f_mod,c(50,50))
+sexrez_f<-ED(genD_f_mod,50,interval="delta",reference="control")
+
+#let's model the mortality rate for the female of both populations
+genD_m_mod<-drm(dead/total~dose,weights=total,
+                data=genDdata_m,curveid=population,
+                fct=LN.3u(),
+                type="binomial")
+plot(genD_m_mod,type="confidence",broken=TRUE)
+plot(genD_m_mod,type="obs",add=TRUE)
+EDcomp(genD_m_mod,c(50,50))
+sexrez_m<-ED(genD_m_mod,50,interval="delta",reference="control")
+
+#a combined graph of male and female regressions
+op<-par(mfrow=c(2,1),mar=c(1,1,1,1))
+plot(genD_f_mod,type="confidence")
+plot(genD_f_mod,type="obs",add=TRUE)
+abline(v=39.6,col="red")
+
+plot(genD_m_mod,type="confidence")
+plot(genD_m_mod,type="obs",add=TRUE)
+abline(v=19.5,col="red")
+
+par(op)
+
+#another solution would be to do a logistic regression...
+
+
+
+###############################################################################
+#What is the effect of flies number on the evaluation of DL50?
+###############################################################################
 
 #let's do a model for every repetition
 droz_mod<-drm(dead/total~dose,weights=total,
@@ -96,10 +166,9 @@ abline(17.36,0,col="red",lwd=2,lty=2)
 
 
 
-
-
-
-
+###############################################################################
+#
+###############################################################################
 
 
 
