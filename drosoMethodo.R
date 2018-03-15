@@ -32,7 +32,8 @@ plot(checkdat)
 #Is there a difference of DL50 between male and female?
 ###############################################################################
 
-#we select the data of phosmet test with the St Foy population
+#we select the data of phosmet tests with the St Foy population, with
+#flies of 24-48 hours age
 sexdata<-dataDroz[dataDroz$number_comp==1,]
 
 #let's do a model for every repetition
@@ -50,10 +51,14 @@ sexrez<-ED(sex_mod,50,interval="delta",reference="control")
 #What is the effect of the age of the flies on the LD50?
 ###############################################################################
 
-#we select the data of phosmet test with the St Foy population
+#we select the data of phosmet test with the St Foy population, with different
+#age classes
 agedata<-dataDroz[dataDroz$age_comp==1,]
+agedata_f<-agedata[agedata$sex=="female",]
+agedata_m<-agedata[agedata$sex=="male",]
 
-#let's do a model for every repetition
+
+#let's do a model for every repetition mixing male and female
 age_mod<-drm(dead/total~dose,weights=total,
              data=agedata,curveid=age,
              fct=LN.3u(),
@@ -62,6 +67,28 @@ plot(age_mod,type="confidence")
 plot(age_mod,type="obs",add=TRUE)
 EDcomp(age_mod,c(50,50))
 agerez<-ED(age_mod,50,interval="delta",reference="control")
+
+#let's model the mortality rate for the females of the different classes of
+#age
+age_mod_f<-drm(dead/total~dose,weights=total,
+               data=agedata_f,curveid=age,
+               fct=LN.3u(),
+               type="binomial")
+plot(age_mod_f,type="confidence")
+plot(age_mod_f,type="obs",add=TRUE)
+EDcomp(age_mod_f,c(50,50))
+agerez_f<-ED(age_mod_f,50,interval="delta",reference="control")
+
+#let's model the mortality rate for the males of the different classes of
+#age
+age_mod_m<-drm(dead/total~dose,weights=total,
+               data=agedata_m,curveid=age,
+               fct=LN.3u(),
+               type="binomial")
+plot(age_mod_m,type="confidence")
+plot(age_mod_m,type="obs",add=TRUE)
+EDcomp(age_mod_m,c(50,50))
+agerez_m<-ED(age_mod_m,50,interval="delta",reference="control")
 
 
 ###############################################################################
@@ -73,25 +100,35 @@ genDdata<-dataDroz[dataDroz$genediv_comp==1,]
 genDdata_f<-genDdata[genDdata$sex=="female",]
 genDdata_m<-genDdata[genDdata$sex=="male",]
 
+#let's model the mortality rate for both populations
+genD_mod<-drm(dead/total~dose,weights=total,
+              data=genDdata,curveid=population,
+              fct=LN.3u(),
+              type="binomial")
+plot(genD_mod,type="confidence")
+plot(genD_mod,type="obs",add=TRUE)
+EDcomp(genD_mod,c(50,50))
+sexrez<-ED(genD_mod,50,interval="delta",reference="control")
+
 #let's model the mortality rate for the females of both populations
-genD_f_mod<-drm(dead/total~dose,weights=total,
+genD_mod_f<-drm(dead/total~dose,weights=total,
                 data=genDdata_f,curveid=population,
                 fct=LN.3u(),
                 type="binomial")
-plot(genD_f_mod,type="confidence")
-plot(genD_f_mod,type="obs",add=TRUE)
-EDcomp(genD_f_mod,c(50,50))
-sexrez_f<-ED(genD_f_mod,50,interval="delta",reference="control")
+plot(genD_mod_f,type="confidence")
+plot(genD_mod_f,type="obs",add=TRUE)
+EDcomp(genD_mod_f,c(50,50))
+sexrez_f<-ED(genD_mod_f,50,interval="delta",reference="control")
 
 #let's model the mortality rate for the males of both populations
-genD_m_mod<-drm(dead/total~dose,weights=total,
+genD_mod_m<-drm(dead/total~dose,weights=total,
                 data=genDdata_m,curveid=population,
                 fct=LN.3u(),
                 type="binomial")
-plot(genD_m_mod,type="confidence",broken=TRUE)
-plot(genD_m_mod,type="obs",add=TRUE)
-EDcomp(genD_m_mod,c(50,50))
-sexrez_m<-ED(genD_m_mod,50,interval="delta",reference="control")
+plot(genD_mod_m,type="confidence",broken=TRUE)
+plot(genD_mod_m,type="obs",add=TRUE)
+EDcomp(genD_mod_m,c(50,50))
+sexrez_m<-ED(genD_mod_m,50,interval="delta",reference="control")
 
 #a combined graph of male and female regressions
 op<-par(mfrow=c(2,1),mar=c(1,1,1,1))
@@ -108,9 +145,8 @@ par(op)
 #another solution would be to do a logistic regression...
 
 
-
 ###############################################################################
-#What is the effect of flies number on the evaluation of LD50?
+#What is the effect of number of flies used for a test on LD50 evaluation?
 ###############################################################################
 
 #we select the data of phosmet test with the St Foy population
@@ -189,7 +225,7 @@ expodata<-dataDroz[dataDroz$expo_comp==1,]
 
 #let's do a model for every repetition
 expo_mod<-drm(dead/total~dose,weights=total,
-              data=expodata,curveid=exposition,
+              data=expodata,curveid=repet,
               fct=LN.3u(),
               type="binomial")
 plot(expo_mod,type="confidence")
