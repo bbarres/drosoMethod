@@ -1,6 +1,6 @@
 ###############################################################################
 ###############################################################################
-#R code for the Drosophila pesticide resistance tests paper
+#R code for the Drosophila suzukii pesticide resistance tests paper
 ###############################################################################
 ###############################################################################
 
@@ -11,6 +11,7 @@ library(gdata)
 
 #set the working directory
 setwd("~/work/Rfichiers/Githuber/droso_data")
+setwd("K:/Projets de recherche/2015-PPV-résistance/ARTICLE-Dsuzukii")
 
 #load the dataset
 dataDroz<-read.table("droso_data.txt",header=T,sep="\t")
@@ -46,23 +47,33 @@ sexrez<-ED(sex_mod,50,interval="delta",reference="control")
 
 
 ###############################################################################
-#What is the effect of the age of the flies on the DL50?
-###############################################################################
-
-
-
-
-
-###############################################################################
-#What is the effect of the genetic diversity of the tested population on DL50?
+#What is the effect of the age of the flies on the LD50?
 ###############################################################################
 
 #we select the data of phosmet test with the St Foy population
+agedata<-dataDroz[dataDroz$age_comp==1,]
+
+#let's do a model for every repetition
+age_mod<-drm(dead/total~dose,weights=total,
+             data=agedata,curveid=age,
+             fct=LN.3u(),
+             type="binomial")
+plot(age_mod,type="confidence")
+plot(age_mod,type="obs",add=TRUE)
+EDcomp(age_mod,c(50,50))
+agerez<-ED(age_mod,50,interval="delta",reference="control")
+
+
+###############################################################################
+#What is the effect of the genetic diversity of the tested population on LD50?
+###############################################################################
+
+#we select the data of phosmet test with the St Foy & SF IsoA populations
 genDdata<-dataDroz[dataDroz$genediv_comp==1,]
 genDdata_f<-genDdata[genDdata$sex=="female",]
 genDdata_m<-genDdata[genDdata$sex=="male",]
 
-#let's model the mortality rate for the female of both populations
+#let's model the mortality rate for the females of both populations
 genD_f_mod<-drm(dead/total~dose,weights=total,
                 data=genDdata_f,curveid=population,
                 fct=LN.3u(),
@@ -72,7 +83,7 @@ plot(genD_f_mod,type="obs",add=TRUE)
 EDcomp(genD_f_mod,c(50,50))
 sexrez_f<-ED(genD_f_mod,50,interval="delta",reference="control")
 
-#let's model the mortality rate for the female of both populations
+#let's model the mortality rate for the males of both populations
 genD_m_mod<-drm(dead/total~dose,weights=total,
                 data=genDdata_m,curveid=population,
                 fct=LN.3u(),
@@ -99,18 +110,21 @@ par(op)
 
 
 ###############################################################################
-#What is the effect of flies number on the evaluation of DL50?
+#What is the effect of flies number on the evaluation of LD50?
 ###############################################################################
 
+#we select the data of phosmet test with the St Foy population
+numberdata<-dataDroz[dataDroz$number_comp==1,]
+
 #let's do a model for every repetition
-droz_mod<-drm(dead/total~dose,weights=total,
-              data=dataDroz,curveid=repet,
-              fct=LN.3u(),
-              type="binomial")
-plot(droz_mod,type="confidence")
-plot(droz_mod,type="obs",add=TRUE)
-rez<-ED(droz_mod,50,interval="delta",reference="control")
-write.table(rez,file="rez.txt",quote=FALSE,sep="\t",row.names=TRUE)
+number_mod<-drm(dead/total~dose,weights=total,
+                data=numberdata,curveid=repet,
+                fct=LN.3u(),
+                type="binomial")
+plot(number_mod,type="confidence")
+plot(number_mod,type="obs",add=TRUE)
+numberrez<-ED(number_mod,50,interval="delta",reference="control")
+write.table(numberrez,file="numberrez.txt",quote=FALSE,sep="\t",row.names=TRUE)
 
 
 #another way to do the regression for each repetition is to use a loop######
@@ -167,9 +181,20 @@ abline(17.36,0,col="red",lwd=2,lty=2)
 
 
 ###############################################################################
-#
+#What is the effect of exposure time on the evaluation of LD50?
 ###############################################################################
 
+#we select the data of lambda-cyhalothrin test with the St Foy population
+expodata<-dataDroz[dataDroz$expo_comp==1,]
 
+#let's do a model for every repetition
+expo_mod<-drm(dead/total~dose,weights=total,
+              data=expodata,curveid=exposition,
+              fct=LN.3u(),
+              type="binomial")
+plot(expo_mod,type="confidence")
+plot(expo_mod,type="obs",add=TRUE)
+EDcomp(expo_mod,c(50,50))
+exporez<-ED(expo_mod,50,interval="delta",reference="control")
 
 
