@@ -15,6 +15,9 @@ setwd("K:/Projets de recherche/2015-PPV-résistance/ARTICLE-Dsuzukii")
 
 #load the dataset
 dataDroz<-read.table("droso_data.txt",header=T,sep="\t")
+# #we remove the two concentrations that were used at the beginning of the 
+# #test when we were still adjusting the range of doses for the test
+# dataDroz<-dataDroz[dataDroz$dose!=603.70 & dataDroz$dose!=301.85,]
 #creation of variable to distinguish between male and female and time 
 #of exposure to pesticide
 dataDroz<-cbind(dataDroz,"repet"=paste(dataDroz$date,dataDroz$sex, 
@@ -35,6 +38,8 @@ plot(checkdat)
 #we select the data of phosmet tests with the St Foy population, with
 #flies of 24-48 hours age
 sexdata<-dataDroz[dataDroz$number_comp==1,]
+sexdata_f<-sexdata[sexdata$sex=="female",]
+sexdata_m<-sexdata[sexdata$sex=="male",]
 
 #let's do a model for every repetition
 sex_mod<-drm(dead/total~dose,weights=total,
@@ -45,6 +50,36 @@ plot(sex_mod,type="confidence")
 plot(sex_mod,type="obs",add=TRUE)
 EDcomp(sex_mod,c(50,50))
 sexrez<-ED(sex_mod,50,interval="delta",reference="control")
+
+#we do the same thing, but before that we combine the effective of the 
+#different repetition
+temp<-aggregate(cbind(dead,total)~dose+sex,data=sexdata,"sum")
+sex_mod2<-drm(dead/total~dose,weights=total,
+              data=temp,curveid=sex,
+              fct=LN.3u(),
+              type="binomial")
+plot(sex_mod2,type="confidence")
+plot(sex_mod2,type="obs",add=TRUE)
+EDcomp(sex_mod2,c(50,50))
+sexrez2<-ED(sex_mod2,50,interval="delta",reference="control")
+
+sex_mod_f<-drm(dead/total~dose,weights=total,
+               data=sexdata_f,
+               fct=LN.3u(),
+               type="binomial")
+plot(sex_mod_f,type="confidence")
+plot(sex_mod_f,type="obs",add=TRUE)
+ED(sex_mod_f,50)
+
+sex_mod_m<-drm(dead/total~dose,weights=total,
+               data=sexdata_m,
+               fct=LN.3u(),
+               type="binomial")
+plot(sex_mod_m,type="confidence")
+plot(sex_mod_m,type="obs",add=TRUE)
+ED(sex_mod_m,50)
+
+EDcomp(list("sex_mod_f","sex_mod_m"),c(50,50))
 
 
 ###############################################################################
