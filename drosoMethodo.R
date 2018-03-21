@@ -53,9 +53,9 @@ sexrez<-ED(sex_mod,50,interval="delta",reference="control")
 
 #we do the same thing, but before that we combine the effective of the 
 #different repetition
-temp<-aggregate(cbind(dead,total)~dose+sex,data=sexdata,"sum")
+sexdata_conc<-aggregate(cbind(dead,total)~dose+sex,data=sexdata,"sum")
 sex_mod2<-drm(dead/total~dose,weights=total,
-              data=temp,curveid=sex,
+              data=sexdata_conc,curveid=sex,
               fct=LN.3u(),
               type="binomial")
 plot(sex_mod2,type="confidence")
