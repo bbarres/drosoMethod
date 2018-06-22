@@ -52,7 +52,7 @@ EDcomp(sex_mod,c(50,50))
 sexrez<-ED(sex_mod,50,interval="delta",reference="control")
 
 #because there is a bug to display the 95CI with models using curveid,
-#we
+#we plot the different modality separately
 sex_mod_f<-drm(dead/total~dose,weights=total,
                data=sexdata_f,
                fct=LN.3u(),
@@ -62,6 +62,92 @@ plot(sex_mod_f,type="obs",add=TRUE)
 ED(sex_mod_f,50)
 
 sex_mod_m<-drm(dead/total~dose,weights=total,
+               data=sexdata_m,
+               fct=LN.3u(),
+               type="binomial")
+plot(sex_mod_m,type="confidence")
+plot(sex_mod_m,type="obs",add=TRUE)
+ED(sex_mod_m,50)
+
+op<-par(mar=c(5,5,4,1))
+plot(sex_mod_f,type="confidence",col="black",bty="n",axes=FALSE,ann=FALSE,
+     lwd=3)
+plot(sex_mod_f,type="confidence",col="black",add=TRUE)
+box(lwd=3,lty=1)
+axis(1,at=c(1,10,100,500),labels=c("0","10","100","500"),
+     cex.axis=1.5,font.axis=2,lwd.ticks=2)
+axis(2,at=c(0,0.2,0.4,0.6,0.8,1),labels=c("0","20","40","60","80","100"),
+     cex.axis=1.5,font.axis=2,lwd.ticks=2,las=1)
+plot(sex_mod_f,type="obs",add=TRUE,pch=21,cex=2,
+     col=rgb(0,0,0,0.5),bg=rgb(0,0,0,0.5))
+plot(sex_mod_m,type="confidence",add=TRUE,col="grey40",lty=2,lwd=3)
+plot(sex_mod_m,type="obs",add=TRUE,pch=24,cex=2,
+     col=rgb(0,0,0,0.3),bg=rgb(0,0,0,0.0))
+title(xlab="Dose (mg/L)",ylab="Mortality rate",cex.lab=2,font.lab=2)
+par(op)
+#export .pdf 10*7 inches
+
+
+###############################################################################
+#What is the effect of the age of the flies on the LD50?
+###############################################################################
+
+#we select the data of phosmet test with the St Foy population, with different
+#age classes
+agedata<-dataDroz[dataDroz$age_comp==1,]
+agedata_f<-agedata[agedata$sex=="female",]
+agedata_m<-agedata[agedata$sex=="male",]
+
+#let's model the mortality rate for the females of the different classes of
+#age
+age_mod_f<-drm(dead/total~dose,weights=total,
+               data=agedata_f,curveid=age,
+               fct=LN.3u(),
+               type="binomial")
+plot(age_mod_f,type="confidence")
+plot(age_mod_f,type="obs",add=TRUE)
+EDcomp(age_mod_f,c(50,50))
+agerez_f<-ED(age_mod_f,50,interval="delta",reference="control")
+
+#because there is a bug to display the 95CI with models using curveid,
+#we plot the different modality separately
+age_mod_f24<-drm(dead/total~dose,weights=total,
+                 data=agedata_f[agedata_f$age=="0-24h",],
+                 fct=LN.3u(),
+                 type="binomial")
+age_mod_f48<-drm(dead/total~dose,weights=total,
+                 data=agedata_f[agedata_f$age=="24-48h",],
+                 fct=LN.3u(),
+                 type="binomial")
+age_mod_f96<-drm(dead/total~dose,weights=total,
+                 data=agedata_f[agedata_f$age=="72-96h",],
+                 fct=LN.3u(),
+                 type="binomial")
+
+#female plot for different age category
+op<-par(mar=c(5,5,4,1))
+plot(age_mod_f48,type="confidence",col=rgb(0.4,0.2,0.6,1),
+     bty="n",axes=FALSE,ann=FALSE,lwd=3)
+plot(age_mod_f48,type="obs",add=TRUE,pch=21,cex=2,
+     col=rgb(0.4,0.2,0.6,1),bg=rgb(0.4,0.2,0.6,0.3))
+box(lwd=3,lty=1)
+axis(1,at=c(1,10,100,500),labels=c("0","10","100","500"),
+     cex.axis=1.5,font.axis=2,lwd.ticks=2)
+axis(2,at=c(0,0.2,0.4,0.6,0.8,1),labels=c("0","20","40","60","80","100"),
+     cex.axis=1.5,font.axis=2,lwd.ticks=2,las=1)
+plot(age_mod_f24,type="confidence",add=TRUE,
+     col=rgb(0.6,0.2,0.2,1),lwd=3)
+plot(age_mod_f24,type="obs",add=TRUE,pch=21,cex=2,
+     col=rgb(0.6,0.2,0.2,1),bg=rgb(0.6,0.2,0.2,0.3))
+plot(age_mod_f96,type="confidence",add=TRUE,
+     col=rgb(0.4,0.5,0.4,1),lwd=3)
+plot(age_mod_f96,type="obs",add=TRUE,pch=21,cex=2,
+     col=rgb(0.4,0.5,0.4,1),bg=rgb(0.4,0.5,0.4,0.3))
+title(xlab="Dose (mg/L)",ylab="Mortality rate",cex.lab=2,font.lab=2)
+par(op)
+
+
+age_mod_m24<-drm(dead/total~dose,weights=total,
                data=sexdata_m,
                fct=LN.3u(),
                type="binomial")
@@ -86,37 +172,6 @@ title(xlab="Dose (mg/L)",ylab="Mortality rate",cex.lab=2,font.lab=2)
 par(op)
 #export .pdf 10*7 inches
 
-###############################################################################
-#What is the effect of the age of the flies on the LD50?
-###############################################################################
-
-#we select the data of phosmet test with the St Foy population, with different
-#age classes
-agedata<-dataDroz[dataDroz$age_comp==1,]
-agedata_f<-agedata[agedata$sex=="female",]
-agedata_m<-agedata[agedata$sex=="male",]
-
-
-#let's do a model for every repetition mixing male and female
-age_mod<-drm(dead/total~dose,weights=total,
-             data=agedata,curveid=age,
-             fct=LN.3u(),
-             type="binomial")
-plot(age_mod,type="confidence")
-plot(age_mod,type="obs",add=TRUE)
-EDcomp(age_mod,c(50,50))
-agerez<-ED(age_mod,50,interval="delta",reference="control")
-
-#let's model the mortality rate for the females of the different classes of
-#age
-age_mod_f<-drm(dead/total~dose,weights=total,
-               data=agedata_f,curveid=age,
-               fct=LN.3u(),
-               type="binomial")
-plot(age_mod_f,type="confidence")
-plot(age_mod_f,type="obs",add=TRUE)
-EDcomp(age_mod_f,c(50,50))
-agerez_f<-ED(age_mod_f,50,interval="delta",reference="control")
 
 #let's model the mortality rate for the males of the different classes of
 #age

@@ -41,7 +41,8 @@ radarchart(dataNa,
 
 radarchart(dataHS,
            #axis parameters
-           axistype=1,caxislabels=seq(0,100,25),axislabcol="grey50",calcex=1.5,
+           axistype=1,caxislabels=seq(0.00,1.00,0.25),axislabcol="grey50",
+           calcex=1.5,
            #grid parameters
            cglty=1,cglwd=2,cglcol="grey70",
            #labels parameters
@@ -67,7 +68,8 @@ radarchart(dataNa,
            pcol=colpoly_bord,pfcol=colpoly_area,plwd=5,plty=1)
 radarchart(dataHS,
            #axis parameters
-           axistype=1,caxislabels=seq(0,100,25),axislabcol="grey50",calcex=1.5,
+           axistype=1,caxislabels=seq(0.00,1.00,0.25),axislabcol="grey50",
+           calcex=1.5,
            #grid parameters
            cglty=1,cglwd=2,cglcol="grey70",
            #labels parameters
