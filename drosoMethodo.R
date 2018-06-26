@@ -89,7 +89,7 @@ par(op)
 
 
 ###############################################################################
-#What is the effect of the age of the flies on the LD50?
+#What is the effect of the age of the flies on their LD50?
 ###############################################################################
 
 #we select the data of phosmet test with the St Foy population, with different
@@ -124,8 +124,37 @@ age_mod_f96<-drm(dead/total~dose,weights=total,
                  fct=LN.3u(),
                  type="binomial")
 
+
+#let's model the mortality rate for the males of the different classes of
+#age
+age_mod_m<-drm(dead/total~dose,weights=total,
+               data=agedata_m,curveid=age,
+               fct=LN.3u(),
+               type="binomial")
+plot(age_mod_m,type="confidence")
+plot(age_mod_m,type="obs",add=TRUE)
+EDcomp(age_mod_m,c(50,50))
+agerez_m<-ED(age_mod_m,50,interval="delta",reference="control")
+
+#because there is a bug to display the 95CI with models using curveid,
+#we plot the different modality separately
+age_mod_m24<-drm(dead/total~dose,weights=total,
+                 data=agedata_m[agedata_m$age=="0-24h",],
+                 fct=LN.3u(),
+                 type="binomial")
+age_mod_m48<-drm(dead/total~dose,weights=total,
+                 data=agedata_m[agedata_m$age=="24-48h",],
+                 fct=LN.3u(),
+                 type="binomial")
+age_mod_m96<-drm(dead/total~dose,weights=total,
+                 data=agedata_m[agedata_m$age=="72-96h",],
+                 fct=LN.3u(),
+                 type="binomial")
+
+
+op<-par(mar=c(5,5,4,1),mfrow=c(2,1))
+
 #female plot for different age category
-op<-par(mar=c(5,5,4,1))
 plot(age_mod_f48,type="confidence",col=rgb(0.4,0.2,0.6,1),
      bty="n",axes=FALSE,ann=FALSE,lwd=3)
 plot(age_mod_f48,type="obs",add=TRUE,pch=21,cex=2,
@@ -144,45 +173,27 @@ plot(age_mod_f96,type="confidence",add=TRUE,
 plot(age_mod_f96,type="obs",add=TRUE,pch=21,cex=2,
      col=rgb(0.4,0.5,0.4,1),bg=rgb(0.4,0.5,0.4,0.3))
 title(xlab="Dose (mg/L)",ylab="Mortality rate",cex.lab=2,font.lab=2)
-par(op)
 
-
-age_mod_m24<-drm(dead/total~dose,weights=total,
-               data=sexdata_m,
-               fct=LN.3u(),
-               type="binomial")
-plot(sex_mod_m,type="confidence")
-plot(sex_mod_m,type="obs",add=TRUE)
-ED(sex_mod_m,50)
-
-op<-par(mar=c(5,5,4,1))
-plot(sex_mod_f,type="confidence",col="black",bty="n",axes=FALSE,ann=FALSE,
-     lwd=3)
-plot(sex_mod_f,type="confidence",col="black",add=TRUE)
+#male plot for different age category
+plot(age_mod_m48,type="confidence",col=rgb(0.4,0.2,0.6,1),
+     bty="n",axes=FALSE,ann=FALSE,lwd=3,lty=2)
+plot(age_mod_m48,type="obs",add=TRUE,pch=24,cex=2,
+     col=rgb(0.4,0.2,0.6,1))
 box(lwd=3,lty=1)
-axis(1,at=c(1,10,100,500),labels=TRUE,cex.axis=1.5,font.axis=2,lwd.ticks=2)
+axis(1,at=c(1,10,100,500),labels=c("0","10","100","500"),
+     cex.axis=1.5,font.axis=2,lwd.ticks=2)
 axis(2,at=c(0,0.2,0.4,0.6,0.8,1),labels=c("0","20","40","60","80","100"),
      cex.axis=1.5,font.axis=2,lwd.ticks=2,las=1)
-plot(sex_mod_f,type="obs",add=TRUE,pch=21,cex=2,
-     col=rgb(0,0,0,0.5),bg=rgb(0,0,0,0.5))
-plot(sex_mod_m,type="confidence",add=TRUE,col="grey40",lty=2,lwd=3)
-plot(sex_mod_m,type="obs",add=TRUE,pch=24,cex=2,
-     col=rgb(0,0,0,0.3),bg=rgb(0,0,0,0.0))
+plot(age_mod_m24,type="confidence",add=TRUE,
+     col=rgb(0.6,0.2,0.2,1),lwd=3,lty=2)
+plot(age_mod_m24,type="obs",add=TRUE,pch=24,cex=2,
+     col=rgb(0.6,0.2,0.2,1))
+plot(age_mod_m96,type="confidence",add=TRUE,
+     col=rgb(0.4,0.5,0.4,1),lwd=3,lty=2)
+plot(age_mod_m96,type="obs",add=TRUE,pch=24,cex=2,
+     col=rgb(0.4,0.5,0.4,1))
 title(xlab="Dose (mg/L)",ylab="Mortality rate",cex.lab=2,font.lab=2)
 par(op)
-#export .pdf 10*7 inches
-
-
-#let's model the mortality rate for the males of the different classes of
-#age
-age_mod_m<-drm(dead/total~dose,weights=total,
-               data=agedata_m,curveid=age,
-               fct=LN.3u(),
-               type="binomial")
-plot(age_mod_m,type="confidence")
-plot(age_mod_m,type="obs",add=TRUE)
-EDcomp(age_mod_m,c(50,50))
-agerez_m<-ED(age_mod_m,50,interval="delta",reference="control")
 
 
 ###############################################################################
