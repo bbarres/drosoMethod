@@ -124,7 +124,6 @@ age_mod_f96<-drm(dead/total~dose,weights=total,
                  fct=LN.3u(),
                  type="binomial")
 
-
 #let's model the mortality rate for the males of the different classes of
 #age
 age_mod_m<-drm(dead/total~dose,weights=total,
@@ -151,30 +150,31 @@ age_mod_m96<-drm(dead/total~dose,weights=total,
                  fct=LN.3u(),
                  type="binomial")
 
-
-op<-par(mar=c(5,5,4,1),mfrow=c(2,1))
-
+#code for the plot comparing the different age categories of the same
+#population, for male and female
+op<-par(mar=c(0,5,6,1),mfrow=c(2,1))
 #female plot for different age category
 plot(age_mod_f48,type="confidence",col=rgb(0.4,0.2,0.6,1),
      bty="n",axes=FALSE,ann=FALSE,lwd=3)
 plot(age_mod_f48,type="obs",add=TRUE,pch=21,cex=2,
-     col=rgb(0.4,0.2,0.6,1),bg=rgb(0.4,0.2,0.6,0.3))
+     col=rgb(0.4,0.2,0.6,0.3),bg=rgb(0.4,0.2,0.6,0.3))
 box(lwd=3,lty=1)
-axis(1,at=c(1,10,100,500),labels=c("0","10","100","500"),
+axis(1,at=c(1,10,100,500),labels=FALSE,
      cex.axis=1.5,font.axis=2,lwd.ticks=2)
 axis(2,at=c(0,0.2,0.4,0.6,0.8,1),labels=c("0","20","40","60","80","100"),
      cex.axis=1.5,font.axis=2,lwd.ticks=2,las=1)
 plot(age_mod_f24,type="confidence",add=TRUE,
      col=rgb(0.6,0.2,0.2,1),lwd=3)
 plot(age_mod_f24,type="obs",add=TRUE,pch=21,cex=2,
-     col=rgb(0.6,0.2,0.2,1),bg=rgb(0.6,0.2,0.2,0.3))
+     col=rgb(0.6,0.2,0.2,0.3),bg=rgb(0.6,0.2,0.2,0.3))
 plot(age_mod_f96,type="confidence",add=TRUE,
      col=rgb(0.4,0.5,0.4,1),lwd=3)
 plot(age_mod_f96,type="obs",add=TRUE,pch=21,cex=2,
-     col=rgb(0.4,0.5,0.4,1),bg=rgb(0.4,0.5,0.4,0.3))
-title(xlab="Dose (mg/L)",ylab="Mortality rate",cex.lab=2,font.lab=2)
-
+     col=rgb(0.4,0.5,0.4,0.3),bg=rgb(0.4,0.5,0.4,0.3))
+text(1.5,y=0.85,labels='\\VE',vfont=c("sans serif","bold"),cex=5)
+title(ylab="Mortality rate",cex.lab=2,font.lab=2)
 #male plot for different age category
+par(mar=c(5,5,1,1))
 plot(age_mod_m48,type="confidence",col=rgb(0.4,0.2,0.6,1),
      bty="n",axes=FALSE,ann=FALSE,lwd=3,lty=2)
 plot(age_mod_m48,type="obs",add=TRUE,pch=24,cex=2,
@@ -193,6 +193,7 @@ plot(age_mod_m96,type="confidence",add=TRUE,
 plot(age_mod_m96,type="obs",add=TRUE,pch=24,cex=2,
      col=rgb(0.4,0.5,0.4,1))
 title(xlab="Dose (mg/L)",ylab="Mortality rate",cex.lab=2,font.lab=2)
+text(1.5,y=0.85,labels='\\MA',vfont=c("sans serif","bold"),cex=5)
 par(op)
 
 
