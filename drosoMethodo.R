@@ -206,16 +206,6 @@ genDdata<-dataDroz[dataDroz$genediv_comp==1,]
 genDdata_f<-genDdata[genDdata$sex=="female",]
 genDdata_m<-genDdata[genDdata$sex=="male",]
 
-#let's model the mortality rate for both populations
-genD_mod<-drm(dead/total~dose,weights=total,
-              data=genDdata,curveid=population,
-              fct=LN.3u(),
-              type="binomial")
-plot(genD_mod,type="confidence")
-plot(genD_mod,type="obs",add=TRUE)
-EDcomp(genD_mod,c(50,50))
-sexrez<-ED(genD_mod,50,interval="delta",reference="control")
-
 #let's model the mortality rate for the females of both populations
 genD_mod_f<-drm(dead/total~dose,weights=total,
                 data=genDdata_f,curveid=population,
@@ -226,26 +216,52 @@ plot(genD_mod_f,type="obs",add=TRUE)
 EDcomp(genD_mod_f,c(50,50))
 sexrez_f<-ED(genD_mod_f,50,interval="delta",reference="control")
 
+#because there is a bug to display the 95CI with models using curveid,
+#we plot the different modality separately
+genD_mod_f_stf<-drm(dead/total~dose,weights=total,
+                    data=genDdata_f[genDdata_f$population=="ste-foy",],
+                    fct=LN.3u(),
+                    type="binomial")
+genD_mod_f_isa<-drm(dead/total~dose,weights=total,
+                    data=genDdata_f[genDdata_f$population=="sf-isoa",],
+                    fct=LN.3u(),
+                    type="binomial")
+
 #let's model the mortality rate for the males of both populations
 genD_mod_m<-drm(dead/total~dose,weights=total,
                 data=genDdata_m,curveid=population,
                 fct=LN.3u(),
                 type="binomial")
-plot(genD_mod_m,type="confidence",broken=TRUE)
+plot(genD_mod_m,type="confidence")
 plot(genD_mod_m,type="obs",add=TRUE)
 EDcomp(genD_mod_m,c(50,50))
 sexrez_m<-ED(genD_mod_m,50,interval="delta",reference="control")
 
+#because there is a bug to display the 95CI with models using curveid,
+#we plot the different modality separately
+genD_mod_m_stf<-drm(dead/total~dose,weights=total,
+                    data=genDdata_m[genDdata_m$population=="ste-foy",],
+                    fct=LN.3u(),
+                    type="binomial")
+genD_mod_m_isa<-drm(dead/total~dose,weights=total,
+                    data=genDdata_m[genDdata_m$population=="sf-isoa",],
+                    fct=LN.3u(),
+                    type="binomial")
+
+
+
+
+
+
 #a combined graph of male and female regressions
 op<-par(mfrow=c(2,1),mar=c(1,1,1,1))
-plot(genD_f_mod,type="confidence")
-plot(genD_f_mod,type="obs",add=TRUE)
+plot(genD_mod_f,type="confidence")
+plot(genD_mod_f,type="obs",add=TRUE)
 abline(v=39.6,col="red")
 
-plot(genD_m_mod,type="confidence")
-plot(genD_m_mod,type="obs",add=TRUE)
+plot(genD_mod_m,type="confidence")
+plot(genD_mod_m,type="obs",add=TRUE)
 abline(v=19.5,col="red")
-
 par(op)
 
 #another solution would be to do a logistic regression...
