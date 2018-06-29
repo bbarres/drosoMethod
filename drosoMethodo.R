@@ -196,6 +196,12 @@ title(xlab="Dose (mg/L)",ylab="Mortality rate",cex.lab=2,font.lab=2)
 text(1.5,y=0.85,labels='\\MA',vfont=c("sans serif","bold"),cex=5)
 par(op)
 
+#in order to take into account both the gender and the age of the population
+#at the same time, we performed a logistic regression. 
+LogReg_gene<-glm(cbind(agedata$alive,agedata$dead)~dose*age*sex,
+                 family=binomial(link=probit),data=agedata)
+summary(LogReg_gene)
+
 
 ###############################################################################
 #What is the effect of the genetic diversity of the tested population on LD50?
@@ -264,7 +270,11 @@ plot(genD_mod_m,type="obs",add=TRUE)
 abline(v=19.5,col="red")
 par(op)
 
-#another solution would be to do a logistic regression...
+#in order to take into account both the gender and the population at the 
+#same time, we performed a logistic regression. 
+LogReg_gene<-glm(cbind(genDdata$alive,genDdata$dead)~dose+population+sex,
+                 family=binomial(link=probit),data=genDdata)
+summary(LogReg_gene)
 
 
 ###############################################################################
