@@ -202,6 +202,10 @@ LogReg_gene<-glm(cbind(agedata$alive,agedata$dead)~dose*age*sex,
                  family=binomial(link=probit),data=agedata)
 summary(LogReg_gene)
 
+LogReg_gene<-glm(cbind(agedata$alive,agedata$dead)~dose+age+sex,
+                 family=binomial(link=probit),data=agedata)
+summary(LogReg_gene)
+
 
 ###############################################################################
 #What is the effect of the genetic diversity of the tested population on LD50?
@@ -215,7 +219,7 @@ genDdata_m<-genDdata[genDdata$sex=="male",]
 #let's model the mortality rate for the females of both populations
 genD_mod_f<-drm(dead/total~dose,weights=total,
                 data=genDdata_f,curveid=population,
-                fct=LN.3u(),
+                fct=LN.2(),
                 type="binomial")
 plot(genD_mod_f,type="confidence")
 plot(genD_mod_f,type="obs",add=TRUE)
@@ -226,17 +230,17 @@ sexrez_f<-ED(genD_mod_f,50,interval="delta",reference="control")
 #we plot the different modality separately
 genD_mod_f_stf<-drm(dead/total~dose,weights=total,
                     data=genDdata_f[genDdata_f$population=="ste-foy",],
-                    fct=LN.3u(),
+                    fct=LN.2(),
                     type="binomial")
 genD_mod_f_isa<-drm(dead/total~dose,weights=total,
                     data=genDdata_f[genDdata_f$population=="sf-isoa",],
-                    fct=LN.3u(),
+                    fct=LN.2(),
                     type="binomial")
 
 #let's model the mortality rate for the males of both populations
 genD_mod_m<-drm(dead/total~dose,weights=total,
                 data=genDdata_m,curveid=population,
-                fct=LN.3u(),
+                fct=LN.2(),
                 type="binomial")
 plot(genD_mod_m,type="confidence")
 plot(genD_mod_m,type="obs",add=TRUE)
@@ -247,28 +251,52 @@ sexrez_m<-ED(genD_mod_m,50,interval="delta",reference="control")
 #we plot the different modality separately
 genD_mod_m_stf<-drm(dead/total~dose,weights=total,
                     data=genDdata_m[genDdata_m$population=="ste-foy",],
-                    fct=LN.3u(),
+                    fct=LN.2(),
                     type="binomial")
 genD_mod_m_isa<-drm(dead/total~dose,weights=total,
                     data=genDdata_m[genDdata_m$population=="sf-isoa",],
-                    fct=LN.3u(),
+                    fct=LN.2(),
                     type="binomial")
 
-
-
-
-
-
-#a combined graph of male and female regressions
-op<-par(mfrow=c(2,1),mar=c(1,1,1,1))
-plot(genD_mod_f,type="confidence")
-plot(genD_mod_f,type="obs",add=TRUE)
-abline(v=39.6,col="red")
-
-plot(genD_mod_m,type="confidence")
-plot(genD_mod_m,type="obs",add=TRUE)
-abline(v=19.5,col="red")
+#code for the plot comparing the different populations with different
+#levels of genetic diversity, for male and female
+op<-par(mar=c(0,5,6,1),mfrow=c(2,1))
+#female plot for different genetic diversity populations
+plot(genD_mod_f_stf,type="confidence",col=rgb(0.4,0.2,0.6,1),
+     bty="n",axes=FALSE,ann=FALSE,lwd=3)
+plot(genD_mod_f_stf,type="obs",add=TRUE,pch=21,cex=2,
+     col=rgb(0.4,0.2,0.6,0.3),bg=rgb(0.4,0.2,0.6,0.3))
+box(lwd=3,lty=1)
+axis(1,at=c(1,10,50,150),labels=FALSE,
+     cex.axis=1.5,font.axis=2,lwd.ticks=2)
+axis(2,at=c(0,0.2,0.4,0.6,0.8,1),labels=c("0","20","40","60","80","100"),
+     cex.axis=1.5,font.axis=2,lwd.ticks=2,las=1)
+plot(genD_mod_f_isa,type="confidence",add=TRUE,
+     col=rgb(0.6,0.2,0.2,1),lwd=3)
+plot(genD_mod_f_isa,type="obs",add=TRUE,pch=21,cex=2,
+     col=rgb(0.6,0.2,0.2,0.3),bg=rgb(0.6,0.2,0.2,0.3))
+text(1.5,y=0.85,labels='\\VE',vfont=c("sans serif","bold"),cex=5)
+title(ylab="Mortality rate",cex.lab=2,font.lab=2)
+#male plot for different genetic diversity populations
+par(mar=c(5,5,1,1))
+plot(genD_mod_m_stf,type="confidence",col=rgb(0.4,0.2,0.6,1),
+     bty="n",axes=FALSE,ann=FALSE,lwd=3,lty=2)
+plot(genD_mod_m_stf,type="obs",add=TRUE,pch=24,cex=2,
+     col=rgb(0.4,0.2,0.6,1))
+box(lwd=3,lty=1)
+axis(1,at=c(1,10,50,150),labels=c("0","10","50","150"),
+     cex.axis=1.5,font.axis=2,lwd.ticks=2)
+axis(2,at=c(0,0.2,0.4,0.6,0.8,1),labels=c("0","20","40","60","80","100"),
+     cex.axis=1.5,font.axis=2,lwd.ticks=2,las=1)
+plot(genD_mod_m_isa,type="confidence",add=TRUE,
+     col=rgb(0.6,0.2,0.2,1),lwd=3,lty=2)
+plot(genD_mod_m_isa,type="obs",add=TRUE,pch=24,cex=2,
+     col=rgb(0.6,0.2,0.2,1))
+title(xlab="Dose (mg/L)",ylab="Mortality rate",cex.lab=2,font.lab=2)
+text(1.5,y=0.85,labels='\\MA',vfont=c("sans serif","bold"),cex=5)
 par(op)
+
+
 
 #in order to take into account both the gender and the population at the 
 #same time, we performed a logistic regression. 
