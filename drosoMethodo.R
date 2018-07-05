@@ -202,6 +202,8 @@ LogReg_gene<-glm(cbind(agedata$alive,agedata$dead)~dose*age*sex,
                  family=binomial(link=probit),data=agedata)
 summary(LogReg_gene)
 
+#we set the age category "72-96h" as the reference
+agedata$age<-relevel(agedata$age,ref="72-96h")
 LogReg_gene<-glm(cbind(agedata$alive,agedata$dead)~dose+age+sex,
                  family=binomial(link=probit),data=agedata)
 summary(LogReg_gene)
@@ -296,8 +298,6 @@ title(xlab="Dose (mg/L)",ylab="Mortality rate",cex.lab=2,font.lab=2)
 text(1.5,y=0.85,labels='\\MA',vfont=c("sans serif","bold"),cex=5)
 par(op)
 
-
-
 #in order to take into account both the gender and the population at the 
 #same time, we performed a logistic regression. 
 LogReg_gene<-glm(cbind(genDdata$alive,genDdata$dead)~dose+population+sex,
@@ -348,26 +348,26 @@ results<-cbind(checkdat,REZdroz)
 
 #the scatter plot of the LD50 analysis with different number of fly per dose
 
-plot(results$ED50[results$sexe=="femelle"]~results$total[results$sexe=="femelle"],
+plot(results$ED50[results$sex=="female"]~results$total[results$sex=="female"],
      xlab =" Number of tested D. suzukii adults",ylab="LD50 (mg/L)",
      main="LD50 values function of the number of tested females")
-plotCI(results$total[results$sexe=="femelle"],
-       results$ED50[results$sexe=="femelle"],
-       ui=results$IC_up[results$sexe=="femelle"],
-       li=results$IC_low[results$sexe=="femelle"],
+plotCI(results$total[results$sex=="female"],
+       results$ED50[results$sex=="female"],
+       ui=results$IC_up[results$sex=="female"],
+       li=results$IC_low[results$sex=="female"],
        add=TRUE)
 abline(39.5964,0,col="red",lwd=2)
 abline(41.9867,0,col="red",lwd=2,lty=2)
 abline(37.2061,0,col="red",lwd=2,lty=2)
 
 
-plot(results$ED50[results$sexe=="male"]~results$total[results$sexe=="male"],
+plot(results$ED50[results$sex=="male"]~results$total[results$sex=="male"],
      xlab =" Number of tested D. suzukii adults",ylab="LD50 (mg/L)",
      main="LD50 values function of the number of tested males")
-plotCI(results$total[results$sexe=="male"],
-       results$ED50[results$sexe=="male"],
-       ui=results$IC_up[results$sexe=="male"],
-       li=results$IC_low[results$sexe=="male"],
+plotCI(results$total[results$sex=="male"],
+       results$ED50[results$sex=="male"],
+       ui=results$IC_up[results$sex=="male"],
+       li=results$IC_low[results$sex=="male"],
        add=TRUE)
 abline(19.1237,0,col="red",lwd=2)
 abline(20.887,0,col="red",lwd=2,lty=2)
