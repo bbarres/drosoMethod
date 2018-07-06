@@ -197,11 +197,7 @@ text(1.5,y=0.85,labels='\\MA',vfont=c("sans serif","bold"),cex=5)
 par(op)
 
 #in order to take into account both the gender and the age of the population
-#at the same time, we performed a logistic regression. 
-LogReg_gene<-glm(cbind(agedata$alive,agedata$dead)~dose*age*sex,
-                 family=binomial(link=probit),data=agedata)
-summary(LogReg_gene)
-
+#at the same time, we perform a logistic regression. 
 #we set the age category "72-96h" as the reference
 agedata$age<-relevel(agedata$age,ref="72-96h")
 LogReg_gene<-glm(cbind(agedata$alive,agedata$dead)~dose+age+sex,
