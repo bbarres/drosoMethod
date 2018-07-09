@@ -269,10 +269,16 @@ axis(1,at=c(1,10,50,150),labels=FALSE,
      cex.axis=1.5,font.axis=2,lwd.ticks=2)
 axis(2,at=c(0,0.2,0.4,0.6,0.8,1),labels=c("0","20","40","60","80","100"),
      cex.axis=1.5,font.axis=2,lwd.ticks=2,las=1)
+segments(ED(genD_mod_f_stf,50,interval="delta",reference="control")[1],-0.2,
+         ED(genD_mod_f_stf,50,interval="delta",reference="control")[1],0.5,
+         lwd=3,col=rgb(0.4,0.2,0.6,1),lty=1)
 plot(genD_mod_f_isa,type="confidence",add=TRUE,
      col=rgb(0.6,0.2,0.2,1),lwd=3)
 plot(genD_mod_f_isa,type="obs",add=TRUE,pch=21,cex=2,
      col=rgb(0.6,0.2,0.2,0.3),bg=rgb(0.6,0.2,0.2,0.3))
+segments(ED(genD_mod_f_isa,50,interval="delta",reference="control")[1],-0.2,
+         ED(genD_mod_f_isa,50,interval="delta",reference="control")[1],0.5,
+         lwd=3,col=rgb(0.6,0.2,0.2,1),lty=1)
 text(1.5,y=0.85,labels='\\VE',vfont=c("sans serif","bold"),cex=5)
 title(ylab="Mortality rate",cex.lab=2,font.lab=2)
 #male plot for different genetic diversity populations
@@ -286,10 +292,16 @@ axis(1,at=c(1,10,50,150),labels=c("0","10","50","150"),
      cex.axis=1.5,font.axis=2,lwd.ticks=2)
 axis(2,at=c(0,0.2,0.4,0.6,0.8,1),labels=c("0","20","40","60","80","100"),
      cex.axis=1.5,font.axis=2,lwd.ticks=2,las=1)
+segments(ED(genD_mod_m_stf,50,interval="delta",reference="control")[1],-0.2,
+         ED(genD_mod_m_stf,50,interval="delta",reference="control")[1],0.5,
+         lwd=3,col=rgb(0.4,0.2,0.6,1),lty=2)
 plot(genD_mod_m_isa,type="confidence",add=TRUE,
      col=rgb(0.6,0.2,0.2,1),lwd=3,lty=2)
 plot(genD_mod_m_isa,type="obs",add=TRUE,pch=24,cex=2,
      col=rgb(0.6,0.2,0.2,1))
+segments(ED(genD_mod_m_isa,50,interval="delta",reference="control")[1],-0.2,
+         ED(genD_mod_m_isa,50,interval="delta",reference="control")[1],0.5,
+         lwd=3,col=rgb(0.6,0.2,0.2,1),lty=2)
 title(xlab="Dose (mg/L)",ylab="Mortality rate",cex.lab=2,font.lab=2)
 text(1.5,y=0.85,labels='\\MA',vfont=c("sans serif","bold"),cex=5)
 par(op)
