@@ -195,6 +195,7 @@ plot(age_mod_m96,type="obs",add=TRUE,pch=24,cex=2,
 title(xlab="Dose (mg/L)",ylab="Mortality rate",cex.lab=2,font.lab=2)
 text(1.5,y=0.85,labels='\\MA',vfont=c("sans serif","bold"),cex=5)
 par(op)
+#export .pdf 10*14 inches
 
 #in order to take into account both the gender and the age of the population
 #at the same time, we perform a logistic regression. 
@@ -305,6 +306,7 @@ segments(ED(genD_mod_m_isa,50,interval="delta",reference="control")[1],-0.2,
 title(xlab="Dose (mg/L)",ylab="Mortality rate",cex.lab=2,font.lab=2)
 text(1.5,y=0.85,labels='\\MA',vfont=c("sans serif","bold"),cex=5)
 par(op)
+#export .pdf 10*14 inches
 
 #in order to take into account both the gender and the population at the 
 #same time, we performed a logistic regression. 
@@ -319,69 +321,97 @@ summary(LogReg_gene)
 
 #we select the data of phosmet test with the St Foy population
 numberdata<-dataDroz[dataDroz$number_comp==1,]
-
-#let's do a model for every repetition
-number_mod<-drm(dead/total~dose,weights=total,
-                data=numberdata,curveid=repet,
-                fct=LN.3u(),
-                type="binomial")
-plot(number_mod,type="confidence")
-plot(number_mod,type="obs",add=TRUE)
-numberrez<-ED(number_mod,50,interval="delta",reference="control")
-write.table(numberrez,file="numberrez.txt",quote=FALSE,sep="\t",row.names=TRUE)
-
-
-#another way to do the regression for each repetition is to use a loop######
+#because on the 2016-06-23, the behaviour of the flies was strange, 
+#this repetition was removed before analysis
+numberdata<-numberdata[numberdata$date!="2016-06-23",]
 
 #first we remove unnecessary levels in the data frame
-dataDroz<-drop.levels(dataDroz)
+numberdata<-drop.levels(numberdata)
 #we then create a dataframe for the results
 REZdroz<-data.frame("repet"=as.character(),"ED50"=as.numeric(),
-                    "IC_low"=as.numeric(),"IC_up"=as.numeric())
+                    "IC_low"=as.numeric(),"IC_up"=as.numeric(),
+                    "SE"=as.numeric())
 #and here comes the loop
-for (i in 1: length(levels(dataDroz$repet))) {
+for (i in 1: length(levels(numberdata$repet))) {
   temp.m1<-drm(dead/total~dose,weights=total,
-               data=dataDroz[dataDroz$repet==levels(dataDroz$repet)[i],],
-               fct=LN.3u(),
+               data=numberdata[numberdata$repet==levels(numberdata$repet)[i],],
+               fct=LN.2(),
                type="binomial")
   temp<-ED(temp.m1,50,interval="delta",reference="control")
-  tempx<-data.frame("date"=names(table(dataDroz$repet))[i],
-                    "ED50"=temp[1],"IC_low"=temp[3],"IC_up"=temp[4])
+  tempx<-data.frame("date"=names(table(numberdata$repet))[i],
+                    "ED50"=temp[1],"IC_low"=temp[3],"IC_up"=temp[4],
+                    "SE"=temp[2])
   REZdroz<-rbind(REZdroz,tempx)
 }
-
 REZdroz<-REZdroz[order(as.character(REZdroz$date)),]
-results<-cbind(checkdat,REZdroz)
-
+results<- merge(checkdat,REZdroz,by.x="repet",by.y="date",all=FALSE)
 
 #the scatter plot of the LD50 analysis with different number of fly per dose
-
+op<-par(mar=c(5,5,1,1),mfrow=c(1,2))
 plot(results$ED50[results$sex=="female"]~results$total[results$sex=="female"],
-     xlab =" Number of tested D. suzukii adults",ylab="LD50 (mg/L)",
-     main="LD50 values function of the number of tested females")
+     xlab ="Mean number of D. suzukii per dose",ylab="LD50 (mg/L)",
+     ylim=c(0,100),xlim=c(50,270),bty="n",ann=FALSE,axes=FALSE,
+     cex=2,pch=21,col=rgb(0,0,0,0.0),bg=rgb(0,0,0,0.0))
+box(lwd=3,lty=1)
+axis(1,at=c(70,105,140,175,210,245),labels=c("10","15","20","25","30","35"),
+     cex.axis=1.5,font.axis=2,lwd.ticks=2)
+axis(2,at=c(0,20,40,60,80,100),labels=c("0","20","40","60","80","100"),
+     cex.axis=1.5,font.axis=2,lwd.ticks=2,las=1)
+title(xlab="Mean number of D. suzukii per dose",
+      ylab="LD50 (mg/L)",cex.lab=2,font.lab=2)
+text(230,y=90,labels='\\VE',vfont=c("sans serif","bold"),cex=5)
 plotCI(results$total[results$sex=="female"],
        results$ED50[results$sex=="female"],
-       ui=results$IC_up[results$sex=="female"],
-       li=results$IC_low[results$sex=="female"],
-       add=TRUE)
-abline(39.5964,0,col="red",lwd=2)
-abline(41.9867,0,col="red",lwd=2,lty=2)
-abline(37.2061,0,col="red",lwd=2,lty=2)
+       ui=results$ED50[results$sex=="female"]+
+         results$SE[results$sex=="female"],
+       li=results$ED50[results$sex=="female"]-
+         results$SE[results$sex=="female"],
+       #ui=results$IC_up[results$sex=="female"],
+       #li=results$IC_low[results$sex=="female"],
+       add=TRUE,cex=2,pch=21,col=rgb(0,0,0,1),pt.bg=rgb(0,0,0,0.3),
+       gap=0.01)
+totfem<-drm(dead/total~dose,weights=total,
+            data=numberdata[numberdata$sex=="female",],
+            fct=LN.2(),
+            type="binomial")
+totfemREZ<-ED(totfem,50,interval="delta",reference="control")
+abline(totfemREZ[1],0,col="red",lwd=2)
+abline(totfemREZ[3],0,col="red",lwd=2,lty=2)
+abline(totfemREZ[4],0,col="red",lwd=2,lty=2)
 
-
+par(mar=c(5,0,1,6))
 plot(results$ED50[results$sex=="male"]~results$total[results$sex=="male"],
-     xlab =" Number of tested D. suzukii adults",ylab="LD50 (mg/L)",
-     main="LD50 values function of the number of tested males")
+     xlab ="Mean number of D. suzukii per dose",ylab="LD50 (mg/L)",
+     ylim=c(0,100),xlim=c(50,270),bty="n",ann=FALSE,axes=FALSE,
+     cex=2,pch=24,col=rgb(0,0,0,0.0),bg=rgb(0,0,0,0.0))
+box(lwd=3,lty=1)
+axis(1,at=c(70,105,140,175,210,245),labels=c("10","15","20","25","30","35"),
+     cex.axis=1.5,font.axis=2,lwd.ticks=2)
+axis(2,at=c(0,20,40,60,80,100),labels=FALSE,
+     cex.axis=1.5,font.axis=2,lwd.ticks=2,las=1)
+title(xlab="Mean number of D. suzukii per dose",
+      ylab="",cex.lab=2,font.lab=2)
+text(230,y=90,labels='\\MA',vfont=c("sans serif","bold"),cex=5)
 plotCI(results$total[results$sex=="male"],
        results$ED50[results$sex=="male"],
-       ui=results$IC_up[results$sex=="male"],
-       li=results$IC_low[results$sex=="male"],
-       add=TRUE)
-abline(19.1237,0,col="red",lwd=2)
-abline(20.887,0,col="red",lwd=2,lty=2)
-abline(17.36,0,col="red",lwd=2,lty=2)
-
-
+       ui=results$ED50[results$sex=="male"]+
+         results$SE[results$sex=="male"],
+       li=results$ED50[results$sex=="male"]-
+         results$SE[results$sex=="male"],
+       #ui=results$IC_up[results$sex=="male"],
+       #li=results$IC_low[results$sex=="male"],
+       add=TRUE,cex=2,pch=24,col=rgb(0,0,0,1),pt.bg=rgb(0,0,0,0.0),
+       gap=0.01)
+totmal<-drm(dead/total~dose,weights=total,
+            data=numberdata[numberdata$sex=="male",],
+            fct=LN.2(),
+            type="binomial")
+totmalREZ<-ED(totmal,50,interval="delta",reference="control")
+abline(totmalREZ[1],0,col="red",lwd=2)
+abline(totmalREZ[3],0,col="red",lwd=2,lty=2)
+abline(totmalREZ[4],0,col="red",lwd=2,lty=2)
+par(op)
+#export .pdf 15*7 inches
 
 
 ###############################################################################
