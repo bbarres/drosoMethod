@@ -280,6 +280,7 @@ plot(genD_mod_f_isa,type="obs",add=TRUE,pch=21,cex=2,
 segments(ED(genD_mod_f_isa,50,interval="delta",reference="control")[1],-0.2,
          ED(genD_mod_f_isa,50,interval="delta",reference="control")[1],0.5,
          lwd=3,col=rgb(0.6,0.2,0.2,1),lty=1)
+abline(h=0.5,lwd=3,col=grey(0.5))
 text(1.5,y=0.85,labels='\\VE',vfont=c("sans serif","bold"),cex=5)
 title(ylab="Mortality rate",cex.lab=2,font.lab=2)
 #male plot for different genetic diversity populations
@@ -303,10 +304,11 @@ plot(genD_mod_m_isa,type="obs",add=TRUE,pch=24,cex=2,
 segments(ED(genD_mod_m_isa,50,interval="delta",reference="control")[1],-0.2,
          ED(genD_mod_m_isa,50,interval="delta",reference="control")[1],0.5,
          lwd=3,col=rgb(0.6,0.2,0.2,1),lty=2)
+abline(h=0.5,lwd=3,col=grey(0.5))
 title(xlab="Dose (mg/L)",ylab="Mortality rate",cex.lab=2,font.lab=2)
 text(1.5,y=0.85,labels='\\MA',vfont=c("sans serif","bold"),cex=5)
 par(op)
-#export .pdf 10*14 inches
+#export .pdf 8*14 inches
 
 #in order to take into account both the gender and the population at the 
 #same time, we performed a logistic regression. 
