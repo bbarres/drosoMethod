@@ -11,7 +11,6 @@ library(gdata)
 
 #set the working directory
 setwd("~/work/Rfichiers/Githuber/droso_data")
-setwd("K:/Projets de recherche/2015-PPV-résistance/ARTICLE-Dsuzukii")
 
 #load the dataset
 dataDroz<-read.table("droso_data.txt",header=T,sep="\t")
@@ -323,7 +322,7 @@ summary(LogReg_gene)
 
 #we select the data of phosmet test with the St Foy population
 numberdata<-dataDroz[dataDroz$number_comp==1,]
-#because on the 2016-06-23, the behaviour of the flies was strange, 
+#because on the 2016-06-23, the behaviour of the flies was abnormal, 
 #this repetition was removed before analysis
 numberdata<-numberdata[numberdata$date!="2016-06-23",]
 
