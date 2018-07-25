@@ -45,8 +45,6 @@ sex_mod<-drm(dead/total~dose,weights=total,
              data=sexdata,curveid=sex,
              fct=LN.3u(),
              type="binomial")
-plot(sex_mod,type="confidence")
-plot(sex_mod,type="obs",add=TRUE)
 EDcomp(sex_mod,c(50,50))
 sexrez<-ED(sex_mod,50,interval="delta",reference="control")
 
@@ -56,17 +54,10 @@ sex_mod_f<-drm(dead/total~dose,weights=total,
                data=sexdata_f,
                fct=LN.3u(),
                type="binomial")
-plot(sex_mod_f,type="confidence")
-plot(sex_mod_f,type="obs",add=TRUE)
-ED(sex_mod_f,50)
-
 sex_mod_m<-drm(dead/total~dose,weights=total,
                data=sexdata_m,
                fct=LN.3u(),
                type="binomial")
-plot(sex_mod_m,type="confidence")
-plot(sex_mod_m,type="obs",add=TRUE)
-ED(sex_mod_m,50)
 
 op<-par(mar=c(5,5,4,1))
 plot(sex_mod_f,type="confidence",col="black",bty="n",axes=FALSE,ann=FALSE,
