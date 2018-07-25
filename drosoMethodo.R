@@ -103,8 +103,6 @@ age_mod_f<-drm(dead/total~dose,weights=total,
                data=agedata_f,curveid=age,
                fct=LN.3u(),
                type="binomial")
-plot(age_mod_f,type="confidence")
-plot(age_mod_f,type="obs",add=TRUE)
 EDcomp(age_mod_f,c(50,50))
 agerez_f<-ED(age_mod_f,50,interval="delta",reference="control")
 
@@ -129,8 +127,6 @@ age_mod_m<-drm(dead/total~dose,weights=total,
                data=agedata_m,curveid=age,
                fct=LN.3u(),
                type="binomial")
-plot(age_mod_m,type="confidence")
-plot(age_mod_m,type="obs",add=TRUE)
 EDcomp(age_mod_m,c(50,50))
 agerez_m<-ED(age_mod_m,50,interval="delta",reference="control")
 
@@ -196,14 +192,6 @@ text(1.5,y=0.85,labels='\\MA',vfont=c("sans serif","bold"),cex=5)
 par(op)
 #export .pdf 10*14 inches
 
-#in order to take into account both the gender and the age of the population
-#at the same time, we perform a logistic regression. 
-#we set the age category "72-96h" as the reference
-agedata$age<-relevel(agedata$age,ref="72-96h")
-LogReg_gene<-glm(cbind(agedata$alive,agedata$dead)~dose+age+sex,
-                 family=binomial(link=probit),data=agedata)
-summary(LogReg_gene)
-
 
 ###############################################################################
 #What is the effect of the genetic diversity of the tested population on LD50?
@@ -217,43 +205,38 @@ genDdata_m<-genDdata[genDdata$sex=="male",]
 #let's model the mortality rate for the females of both populations
 genD_mod_f<-drm(dead/total~dose,weights=total,
                 data=genDdata_f,curveid=population,
-                fct=LN.2(),
+                fct=LN.3u(),
                 type="binomial")
-plot(genD_mod_f,type="confidence")
-plot(genD_mod_f,type="obs",add=TRUE)
 EDcomp(genD_mod_f,c(50,50))
 sexrez_f<-ED(genD_mod_f,50,interval="delta",reference="control")
-
-#because there is a bug to display the 95CI with models using curveid,
-#we plot the different modality separately
-genD_mod_f_stf<-drm(dead/total~dose,weights=total,
-                    data=genDdata_f[genDdata_f$population=="ste-foy",],
-                    fct=LN.2(),
-                    type="binomial")
-genD_mod_f_isa<-drm(dead/total~dose,weights=total,
-                    data=genDdata_f[genDdata_f$population=="sf-isoa",],
-                    fct=LN.2(),
-                    type="binomial")
 
 #let's model the mortality rate for the males of both populations
 genD_mod_m<-drm(dead/total~dose,weights=total,
                 data=genDdata_m,curveid=population,
-                fct=LN.2(),
+                fct=LN.3u(),
                 type="binomial")
-plot(genD_mod_m,type="confidence")
-plot(genD_mod_m,type="obs",add=TRUE)
 EDcomp(genD_mod_m,c(50,50))
 sexrez_m<-ED(genD_mod_m,50,interval="delta",reference="control")
 
 #because there is a bug to display the 95CI with models using curveid,
 #we plot the different modality separately
+
+genD_mod_f_stf<-drm(dead/total~dose,weights=total,
+                    data=genDdata_f[genDdata_f$population=="ste-foy",],
+                    fct=LN.3u(),
+                    type="binomial")
+genD_mod_f_isa<-drm(dead/total~dose,weights=total,
+                    data=genDdata_f[genDdata_f$population=="sf-isoa",],
+                    fct=LN.3u(),
+                    type="binomial")
+
 genD_mod_m_stf<-drm(dead/total~dose,weights=total,
                     data=genDdata_m[genDdata_m$population=="ste-foy",],
-                    fct=LN.2(),
+                    fct=LN.3u(),
                     type="binomial")
 genD_mod_m_isa<-drm(dead/total~dose,weights=total,
                     data=genDdata_m[genDdata_m$population=="sf-isoa",],
-                    fct=LN.2(),
+                    fct=LN.3u(),
                     type="binomial")
 
 #code for the plot comparing the different populations with different
@@ -308,12 +291,6 @@ title(xlab="Dose (mg/L)",ylab="Mortality rate",cex.lab=2,font.lab=2)
 text(1.5,y=0.85,labels='\\MA',vfont=c("sans serif","bold"),cex=5)
 par(op)
 #export .pdf 8*14 inches
-
-#in order to take into account both the gender and the population at the 
-#same time, we performed a logistic regression. 
-LogReg_gene<-glm(cbind(genDdata$alive,genDdata$dead)~dose+population+sex,
-                 family=binomial(link=probit),data=genDdata)
-summary(LogReg_gene)
 
 
 ###############################################################################
