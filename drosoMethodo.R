@@ -9,11 +9,8 @@ library(drc)
 library(plotrix)
 library(gdata)
 
-#set the working directory
-setwd("~/work/Rfichiers/Githuber/droso_data")
-
 #load the dataset
-dataDroz<-read.table("droso_data.txt",header=T,sep="\t")
+dataDroz<-read.table("data/droso_data.txt",header=T,sep="\t")
 # #we remove the two concentrations that were used at the beginning of the 
 # #test when we were still adjusting the range of doses for the test
 # dataDroz<-dataDroz[dataDroz$dose!=603.70 & dataDroz$dose!=301.85,]

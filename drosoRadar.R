@@ -7,12 +7,9 @@
 #loading the libraries
 library(fmsb)
 
-#set the working directory
-setwd("~/work/Rfichiers/Githuber/droso_data")
-
 #load the datasets
-dataNa<-read.table("droso_NumAll.txt",header=TRUE,sep="\t")
-dataHS<-read.table("droso_GeneDiv.txt",header=TRUE,sep="\t")
+dataNa<-read.table("data/droso_NumAll.txt",header=TRUE,sep="\t")
+dataHS<-read.table("data/droso_GeneDiv.txt",header=TRUE,sep="\t")
 
 #defining the two colors used for the two populations tested
 colpoly_bord<-c(rgb(0.2,0.1,0.8,0.9),rgb(0.7,0.3,0.3,0.9))
