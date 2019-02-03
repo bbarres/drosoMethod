@@ -94,7 +94,7 @@ age_mod_f<-drm(dead/total~dose,weights=total,
 EDcomp(age_mod_f,c(50,50))
 agerez_f<-ED(age_mod_f,50,interval="delta",reference="control")
 
-#because there is a bug to display the 95CI with models using curveid,
+#because there is a problem to display the 95CI with models using curveid,
 #we plot the different modality separately
 age_mod_f24<-drm(dead/total~dose,weights=total,
                  data=agedata_f[agedata_f$age=="0-24h",],
@@ -205,6 +205,79 @@ genD_mod_m<-drm(dead/total~dose,weights=total,
                 type="binomial")
 EDcomp(genD_mod_m,c(50,50))
 sexrez_m<-ED(genD_mod_m,50,interval="delta",reference="control")
+
+#because there is a bug to display the 95CI with models using curveid,
+#we plot the different modality separately
+genD_mod_f_stf<-drm(dead/total~dose,weights=total,
+                    data=genDdata_f[genDdata_f$population=="ste-foy",],
+                    fct=LN.2(),
+                    type="binomial")
+genD_mod_f_isa<-drm(dead/total~dose,weights=total,
+                    data=genDdata_f[genDdata_f$population=="sf-isoa",],
+                    fct=LN.2(),
+                    type="binomial")
+
+genD_mod_m_stf<-drm(dead/total~dose,weights=total,
+                    data=genDdata_m[genDdata_m$population=="ste-foy",],
+                    fct=LN.2(),
+                    type="binomial")
+genD_mod_m_isa<-drm(dead/total~dose,weights=total,
+                    data=genDdata_m[genDdata_m$population=="sf-isoa",],
+                    fct=LN.2(),
+                    type="binomial")
+
+#code for the plot comparing the different populations with different
+#levels of genetic diversity, for male and female
+op<-par(mar=c(0,5,6,1),mfrow=c(2,1))
+#female plot for different genetic diversity populations
+plot(genD_mod_f_stf,type="confidence",col=rgb(0.4,0.2,0.6,1),
+     bty="n",axes=FALSE,ann=FALSE,lwd=3)
+plot(genD_mod_f_stf,type="obs",add=TRUE,pch=21,cex=2,
+     col=rgb(0.4,0.2,0.6,0.3),bg=rgb(0.4,0.2,0.6,0.3))
+box(lwd=3,lty=1)
+axis(1,at=c(1,10,50,150),labels=FALSE,
+     cex.axis=1.5,font.axis=2,lwd.ticks=2)
+axis(2,at=c(0,0.2,0.4,0.6,0.8,1),labels=c("0","20","40","60","80","100"),
+     cex.axis=1.5,font.axis=2,lwd.ticks=2,las=1)
+segments(ED(genD_mod_f_stf,50,interval="delta",reference="control")[1],-0.2,
+         ED(genD_mod_f_stf,50,interval="delta",reference="control")[1],0.5,
+         lwd=3,col=rgb(0.4,0.2,0.6,1),lty=1)
+plot(genD_mod_f_isa,type="confidence",add=TRUE,
+     col=rgb(0.6,0.2,0.2,1),lwd=3)
+plot(genD_mod_f_isa,type="obs",add=TRUE,pch=21,cex=2,
+     col=rgb(0.6,0.2,0.2,0.3),bg=rgb(0.6,0.2,0.2,0.3))
+segments(ED(genD_mod_f_isa,50,interval="delta",reference="control")[1],-0.2,
+         ED(genD_mod_f_isa,50,interval="delta",reference="control")[1],0.5,
+         lwd=3,col=rgb(0.6,0.2,0.2,1),lty=1)
+abline(h=0.5,lwd=3,col=grey(0.5))
+text(1.5,y=0.85,labels='\\VE',vfont=c("sans serif","bold"),cex=5)
+title(ylab="Mortality rate",cex.lab=2,font.lab=2)
+#male plot for different genetic diversity populations
+par(mar=c(5,5,1,1))
+plot(genD_mod_m_stf,type="confidence",col=rgb(0.4,0.2,0.6,1),
+     bty="n",axes=FALSE,ann=FALSE,lwd=3,lty=2)
+plot(genD_mod_m_stf,type="obs",add=TRUE,pch=24,cex=2,
+     col=rgb(0.4,0.2,0.6,1))
+box(lwd=3,lty=1)
+axis(1,at=c(1,10,50,150),labels=c("0","10","50","150"),
+     cex.axis=1.5,font.axis=2,lwd.ticks=2)
+axis(2,at=c(0,0.2,0.4,0.6,0.8,1),labels=c("0","20","40","60","80","100"),
+     cex.axis=1.5,font.axis=2,lwd.ticks=2,las=1)
+segments(ED(genD_mod_m_stf,50,interval="delta",reference="control")[1],-0.2,
+         ED(genD_mod_m_stf,50,interval="delta",reference="control")[1],0.5,
+         lwd=3,col=rgb(0.4,0.2,0.6,1),lty=2)
+plot(genD_mod_m_isa,type="confidence",add=TRUE,
+     col=rgb(0.6,0.2,0.2,1),lwd=3,lty=2)
+plot(genD_mod_m_isa,type="obs",add=TRUE,pch=24,cex=2,
+     col=rgb(0.6,0.2,0.2,1))
+segments(ED(genD_mod_m_isa,50,interval="delta",reference="control")[1],-0.2,
+         ED(genD_mod_m_isa,50,interval="delta",reference="control")[1],0.5,
+         lwd=3,col=rgb(0.6,0.2,0.2,1),lty=2)
+abline(h=0.5,lwd=3,col=grey(0.5))
+title(xlab="Dose (mg/L)",ylab="Mortality rate",cex.lab=2,font.lab=2)
+text(1.5,y=0.85,labels='\\MA',vfont=c("sans serif","bold"),cex=5)
+par(op)
+#export .pdf 10*14 inches
 
 
 ###############################################################################
@@ -324,3 +397,6 @@ EDcomp(expo_mod,c(50,50))
 exporez<-ED(expo_mod,50,interval="delta",reference="control")
 
 
+###############################################################################
+#END
+###############################################################################
