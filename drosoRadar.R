@@ -4,16 +4,8 @@
 ###############################################################################
 ###############################################################################
 
-#loading the libraries
-library(fmsb)
-
-#load the datasets
-dataNa<-read.table("data/droso_NumAll.txt",header=TRUE,sep="\t")
-dataHS<-read.table("data/droso_GeneDiv.txt",header=TRUE,sep="\t")
-
-#defining the two colors used for the two populations tested
-colpoly_bord<-c(rgb(0.2,0.1,0.8,0.9),rgb(0.7,0.3,0.3,0.9))
-colpoly_area<-c(rgb(0.2,0.1,0.8,0.4),rgb(0.7,0.3,0.3,0.4))
+#this script provides the code for the radarplot
+source("droso_data_load.R")
 
 
 ###############################################################################

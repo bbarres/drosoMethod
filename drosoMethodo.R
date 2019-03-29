@@ -4,20 +4,8 @@
 ###############################################################################
 ###############################################################################
 
-#loading the libraries
-library(drc)
-library(plotrix)
-library(gdata)
-
-#load the dataset
-dataDroz<-read.table("data/droso_data.txt",header=T,sep="\t")
-# #we remove the two concentrations that were used at the beginning of the 
-# #test when we were still adjusting the range of doses for the test
-# dataDroz<-dataDroz[dataDroz$dose!=603.70 & dataDroz$dose!=301.85,]
-#creation of variable to distinguish between male and female and time 
-#of exposure to pesticide
-dataDroz<-cbind(dataDroz,"repet"=paste(dataDroz$date,dataDroz$sex, 
-                                       dataDroz$exposition))
+#this script provides the code for the analyses of the bioassay results
+source("droso_data_load.R")
 
 
 #let's sum the total number of individual tested and total number of 
