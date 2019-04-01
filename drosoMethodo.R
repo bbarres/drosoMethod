@@ -51,7 +51,7 @@ plot(sex_mod_f,type="obs",add=TRUE,pch=21,cex=2,
 plot(sex_mod_m,type="confidence",add=TRUE,col="grey40",lty=2,lwd=3)
 plot(sex_mod_m,type="obs",add=TRUE,pch=24,cex=2,
      col=rgb(0,0,0,0.3),bg=rgb(0,0,0,0.0))
-title(xlab="Dose (mg/L)",ylab="Mortality rate",cex.lab=2,font.lab=2)
+title(xlab="Dose (mg/l)",ylab="Mortality rate",cex.lab=2,font.lab=2)
 par(op)
 #export .pdf 10*7 inches
 
@@ -156,7 +156,7 @@ plot(age_mod_m96,type="confidence",add=TRUE,
      col=rgb(0.4,0.5,0.4,1),lwd=3,lty=2)
 plot(age_mod_m96,type="obs",add=TRUE,pch=24,cex=2,
      col=rgb(0.4,0.5,0.4,1))
-title(xlab="Dose (mg/L)",ylab="Mortality rate",cex.lab=2,font.lab=2)
+title(xlab="Dose (mg/l)",ylab="Mortality rate",cex.lab=2,font.lab=2)
 text(1.5,y=0.85,labels='\\MA',vfont=c("sans serif","bold"),cex=5)
 par(op)
 #export .pdf 10*14 inches
@@ -255,7 +255,7 @@ segments(ED(genD_mod_m_isa,50,interval="delta",reference="control")[1],-0.2,
          ED(genD_mod_m_isa,50,interval="delta",reference="control")[1],0.5,
          lwd=3,col=rgb(0.6,0.2,0.2,1),lty=2)
 abline(h=0.5,lwd=3,col=grey(0.5))
-title(xlab="Dose (mg/L)",ylab="Mortality rate",cex.lab=2,font.lab=2)
+title(xlab="Dose (mg/l)",ylab="Mortality rate",cex.lab=2,font.lab=2)
 text(1.5,y=0.85,labels='\\MA',vfont=c("sans serif","bold"),cex=5)
 par(op)
 #export .pdf 10*14 inches
@@ -295,7 +295,7 @@ results<- merge(checkdat,REZdroz,by.x="repet",by.y="date",all=FALSE)
 #the scatter plot of the LD50 analysis with different number of fly per dose
 op<-par(mar=c(5,5,1,1),mfrow=c(1,2))
 plot(results$ED50[results$sex=="female"]~results$total[results$sex=="female"],
-     xlab ="Mean number of D. suzukii per dose",ylab="LD50 (mg/L)",
+     xlab ="Mean number of D. suzukii per dose",ylab="LD50 (mg/l)",
      ylim=c(0,100),xlim=c(50,270),bty="n",ann=FALSE,axes=FALSE,
      cex=2,pch=21,col=rgb(0,0,0,0.0),bg=rgb(0,0,0,0.0))
 box(lwd=3,lty=1)
@@ -327,7 +327,7 @@ abline(totfemREZ[4],0,col="red",lwd=2,lty=2)
 
 par(mar=c(5,0,1,6))
 plot(results$ED50[results$sex=="male"]~results$total[results$sex=="male"],
-     xlab ="Mean number of D. suzukii per dose",ylab="LD50 (mg/L)",
+     xlab ="Mean number of D. suzukii per dose",ylab="LD50 (mg/l)",
      ylim=c(0,100),xlim=c(50,270),bty="n",ann=FALSE,axes=FALSE,
      cex=2,pch=24,col=rgb(0,0,0,0.0),bg=rgb(0,0,0,0.0))
 box(lwd=3,lty=1)
