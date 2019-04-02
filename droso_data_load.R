@@ -26,6 +26,12 @@ dataDroz<-cbind(dataDroz,"repet"=paste(dataDroz$date,dataDroz$sex,
                                        dataDroz$exposition))
 
 
+#we compute the total number of individual tested and total number of 	
+#dead individual for each date	
+checkdat<-aggregate(cbind(dead,total)~date+sex+repet,data=dataDroz,"sum")	
+checkdat<-checkdat[order(checkdat$repet),]	
+plot(checkdat)
+
 
 ###############################################################################
 #loading the genetic results data for the radaplot

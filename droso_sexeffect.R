@@ -40,6 +40,7 @@ sex_mod_m<-drm(dead/total~dose,weights=total,
 op<-par(mar=c(5,5,4,1))
 plot(sex_mod_f,type="confidence",col="black",bty="n",axes=FALSE,ann=FALSE,
      lwd=3)
+#we just double it so that the grey appears darker
 plot(sex_mod_f,type="confidence",col="black",add=TRUE)
 box(lwd=3,lty=1)
 axis(1,at=c(1,10,100,500),labels=c("0","10","100","500"),
