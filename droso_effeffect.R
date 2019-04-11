@@ -58,16 +58,6 @@ axis(2,at=c(0,20,40,60,80,100),labels=c("0","20","40","60","80","100"),
 title(xlab=legx,
       ylab="LD50 (mg/l)",cex.lab=2,font.lab=2)
 text(230,y=90,labels='\\VE',vfont=c("sans serif","bold"),cex=5)
-plotCI(results$total[results$sex=="female"],
-       results$ED50[results$sex=="female"],
-       ui=results$ED50[results$sex=="female"]+
-         results$SE[results$sex=="female"],
-       li=results$ED50[results$sex=="female"]-
-         results$SE[results$sex=="female"],
-       #ui=results$IC_up[results$sex=="female"],
-       #li=results$IC_low[results$sex=="female"],
-       add=TRUE,cex=2,pch=21,col=rgb(0,0,0,1),pt.bg=rgb(0,0,0,0.3),
-       gap=0.014)
 totfem<-drm(dead/total~dose,weights=total,
             data=numberdata[numberdata$sex=="female",],
             fct=LN.2(),
@@ -76,6 +66,16 @@ totfemREZ<-ED(totfem,50,interval="delta",reference="control")
 abline(totfemREZ[1],0,col="red",lwd=2)
 abline(totfemREZ[3],0,col="red",lwd=2,lty=2)
 abline(totfemREZ[4],0,col="red",lwd=2,lty=2)
+plotCI(results$total[results$sex=="female"],
+       results$ED50[results$sex=="female"],
+       ui=results$ED50[results$sex=="female"]+
+         results$SE[results$sex=="female"],
+       li=results$ED50[results$sex=="female"]-
+         results$SE[results$sex=="female"],
+       #ui=results$IC_up[results$sex=="female"],
+       #li=results$IC_low[results$sex=="female"],
+       add=TRUE,cex=2,pch=21,col=rgb(0,0,0,1),pt.bg=rgb(0.7,0.7,0.7,1),
+       gap=0.014)
 
 par(mar=c(5,2,1,4))
 plot(results$ED50[results$sex=="male"]~results$total[results$sex=="male"],
@@ -90,16 +90,6 @@ axis(2,at=c(0,20,40,60,80,100),labels=FALSE,
 title(xlab=legx,
       ylab="",cex.lab=2,font.lab=2)
 text(230,y=90,labels='\\MA',vfont=c("sans serif","bold"),cex=5)
-plotCI(results$total[results$sex=="male"],
-       results$ED50[results$sex=="male"],
-       ui=results$ED50[results$sex=="male"]+
-         results$SE[results$sex=="male"],
-       li=results$ED50[results$sex=="male"]-
-         results$SE[results$sex=="male"],
-       #ui=results$IC_up[results$sex=="male"],
-       #li=results$IC_low[results$sex=="male"],
-       add=TRUE,cex=2,pch=24,col=rgb(0,0,0,1),pt.bg=rgb(0,0,0,0.0),
-       gap=0.014)
 totmal<-drm(dead/total~dose,weights=total,
             data=numberdata[numberdata$sex=="male",],
             fct=LN.2(),
@@ -108,6 +98,16 @@ totmalREZ<-ED(totmal,50,interval="delta",reference="control")
 abline(totmalREZ[1],0,col="red",lwd=2)
 abline(totmalREZ[3],0,col="red",lwd=2,lty=2)
 abline(totmalREZ[4],0,col="red",lwd=2,lty=2)
+plotCI(results$total[results$sex=="male"],
+       results$ED50[results$sex=="male"],
+       ui=results$ED50[results$sex=="male"]+
+         results$SE[results$sex=="male"],
+       li=results$ED50[results$sex=="male"]-
+         results$SE[results$sex=="male"],
+       #ui=results$IC_up[results$sex=="male"],
+       #li=results$IC_low[results$sex=="male"],
+       add=TRUE,cex=2,pch=24,col=rgb(0,0,0,1),pt.bg=rgb(1,1,1,1.0),
+       gap=0.011)
 par(op)
 #export .pdf 15*7 inches
 
