@@ -38,7 +38,13 @@ for (i in 1: length(levels(numberdata$repet))) {
 REZdroz<-REZdroz[order(as.character(REZdroz$date)),]
 results<- merge(checkdat,REZdroz,by.x="repet",by.y="date",all=FALSE)
 
+
+###############################################################################
 #the scatter plot of the LD50 analysis with different number of fly per dose
+###############################################################################
+
+legx<-expression(bold("Mean number of ")*bolditalic("D. suzukii ")*
+                   bold("per dose"))
 op<-par(mar=c(5,5,1,1),mfrow=c(1,2))
 plot(results$ED50[results$sex=="female"]~results$total[results$sex=="female"],
      xlab ="Mean number of D. suzukii per dose",ylab="LD50 (mg/l)",
@@ -49,8 +55,8 @@ axis(1,at=c(70,105,140,175,210,245),labels=c("10","15","20","25","30","35"),
      cex.axis=1.5,font.axis=2,lwd.ticks=2)
 axis(2,at=c(0,20,40,60,80,100),labels=c("0","20","40","60","80","100"),
      cex.axis=1.5,font.axis=2,lwd.ticks=2,las=1)
-title(xlab="Mean number of D. suzukii per dose",
-      ylab="LD50 (mg/L)",cex.lab=2,font.lab=2)
+title(xlab=legx,
+      ylab="LD50 (mg/l)",cex.lab=2,font.lab=2)
 text(230,y=90,labels='\\VE',vfont=c("sans serif","bold"),cex=5)
 plotCI(results$total[results$sex=="female"],
        results$ED50[results$sex=="female"],
@@ -61,7 +67,7 @@ plotCI(results$total[results$sex=="female"],
        #ui=results$IC_up[results$sex=="female"],
        #li=results$IC_low[results$sex=="female"],
        add=TRUE,cex=2,pch=21,col=rgb(0,0,0,1),pt.bg=rgb(0,0,0,0.3),
-       gap=0.01)
+       gap=0.014)
 totfem<-drm(dead/total~dose,weights=total,
             data=numberdata[numberdata$sex=="female",],
             fct=LN.2(),
@@ -81,7 +87,7 @@ axis(1,at=c(70,105,140,175,210,245),labels=c("10","15","20","25","30","35"),
      cex.axis=1.5,font.axis=2,lwd.ticks=2)
 axis(2,at=c(0,20,40,60,80,100),labels=FALSE,
      cex.axis=1.5,font.axis=2,lwd.ticks=2,las=1)
-title(xlab="Mean number of D. suzukii per dose",
+title(xlab=legx,
       ylab="",cex.lab=2,font.lab=2)
 text(230,y=90,labels='\\MA',vfont=c("sans serif","bold"),cex=5)
 plotCI(results$total[results$sex=="male"],
@@ -93,7 +99,7 @@ plotCI(results$total[results$sex=="male"],
        #ui=results$IC_up[results$sex=="male"],
        #li=results$IC_low[results$sex=="male"],
        add=TRUE,cex=2,pch=24,col=rgb(0,0,0,1),pt.bg=rgb(0,0,0,0.0),
-       gap=0.01)
+       gap=0.014)
 totmal<-drm(dead/total~dose,weights=total,
             data=numberdata[numberdata$sex=="male",],
             fct=LN.2(),
