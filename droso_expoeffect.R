@@ -9,64 +9,22 @@ source("droso_data_load.R")
 
 
 ###############################################################################
-#radarplot for the comparison of the Number of alleles between two line
+#What is the effect of exposure time on the evaluation of LD50?
 ###############################################################################
 
-radarchart(dataNa,
-           #axis parameters
-           axistype=1,caxislabels=seq(1,5,1),axislabcol="grey50",calcex=1.5,
-           #grid parameters
-           cglty=1,cglwd=2,cglcol="grey70",
-           #labels parameters
-           vlcex=1.5,
-           #polygones parameters
-           pcol=colpoly_bord,pfcol=colpoly_area,plwd=5,plty=1)
-#export .pdf 7*7 inches
+#we select the data of lambda-cyhalothrin test with the St Foy population
+expodata<-dataDroz[dataDroz$expo_comp==1,]
 
+#let's do a model for every repetition
+expo_mod<-drm(dead/total~dose,weights=total,
+              data=expodata,curveid=repet,
+              fct=LN.3u(),
+              type="binomial")
+plot(expo_mod,type="confidence")
+plot(expo_mod,type="obs",add=TRUE)
+EDcomp(expo_mod,c(50,50))
+exporez<-ED(expo_mod,50,interval="delta",reference="control")
 
-###############################################################################
-#radarplot for the comparison of the Number of alleles between two line
-###############################################################################
-
-radarchart(dataHS,
-           #axis parameters
-           axistype=1,caxislabels=seq(0.00,1.00,0.25),axislabcol="grey50",
-           calcex=1.5,
-           #grid parameters
-           cglty=1,cglwd=2,cglcol="grey70",
-           #labels parameters
-           vlcex=1.5,
-           #polygones parameters
-           pcol=colpoly_bord,pfcol=colpoly_area,plwd=5,plty=1)
-#export .pdf 7*7 inches
-
-
-###############################################################################
-#Figure combining the two radarplot
-###############################################################################
-
-op<-par(mfrow=c(1,2),mar=c(2,1,2,0))
-radarchart(dataNa,
-           #axis parameters
-           axistype=1,caxislabels=seq(1,5,1),axislabcol="grey50",calcex=1.5,
-           #grid parameters
-           cglty=1,cglwd=2,cglcol="grey70",
-           #labels parameters
-           vlcex=1.5,
-           #polygones parameters
-           pcol=colpoly_bord,pfcol=colpoly_area,plwd=5,plty=1)
-radarchart(dataHS,
-           #axis parameters
-           axistype=1,caxislabels=seq(0.00,1.00,0.25),axislabcol="grey50",
-           calcex=1.5,
-           #grid parameters
-           cglty=1,cglwd=2,cglcol="grey70",
-           #labels parameters
-           vlcex=1.5,
-           #polygones parameters
-           pcol=colpoly_bord,pfcol=colpoly_area,plwd=5,plty=1)
-par(op)
-#export .pdf 14*7 inches
 
 ###############################################################################
 #END
