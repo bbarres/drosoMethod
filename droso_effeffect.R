@@ -4,12 +4,12 @@
 ###############################################################################
 ###############################################################################
 
+source("droso_data_load.R")
+
 
 ###############################################################################
 #What is the effect of number of flies used for a test on LD50 evaluation?
 ###############################################################################
-
-source("droso_data_load.R")
 
 #we select the data of phosmet test with the St Foy population
 numberdata<-dataDroz[dataDroz$number_comp==1,]

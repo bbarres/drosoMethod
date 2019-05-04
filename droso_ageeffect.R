@@ -4,12 +4,12 @@
 ###############################################################################
 ###############################################################################
 
+source("droso_data_load.R")
+
 
 ###############################################################################
 #What is the effect of the age of the flies on their LD50?
 ###############################################################################
-
-source("droso_data_load.R")
 
 #we select the data of phosmet test with the St Foy population, with different
 #age classes
