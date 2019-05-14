@@ -17,3 +17,9 @@
 ## R scripts
 
 
+## Citation
+You will soon be able (hopefully) to cite the related study as follow : 
+
+
+If you want to use (some of) the code found on this page or if you want to cite this repository : 
+
