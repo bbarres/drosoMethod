@@ -1,6 +1,6 @@
 
 
-# SuMoRe
+# How to create a reliable and reproducible insecticide resistance bioassay? An example on the worldwide invasive pest, *Drosophila suzukii*.
 *This repository contains the R code used for the data analyses and production of the figures of the related article*
 
 
