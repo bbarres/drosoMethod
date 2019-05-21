@@ -52,19 +52,58 @@ logmod<-glm(cbind(expodata$alive,expodata$dead)~dose*sex*exposition,
 #barplot of an example of evolution of the death rate at the dose 0.25mg/l
 ###############################################################################
 
-temp<-read.table("data/droso_expo.txt",header=TRUE,sep="\t")
-tempgraph<-barplot(temp,col=c("black","grey40","grey80"),border=NA,axes=FALSE,
-              axisnames=FALSE,space=0.7,xpd=FALSE)
-axis(1,at=temp,labels=FALSE,lwd=4,font=2,
+data_expo<-read.table("data/droso_expo.txt",header=TRUE,sep="\t")
+data_expo<-t(data_expo[,c(6:3,1)])
+colnames(data_expo)<-data_expo[5,]
+
+#the supplementary figure for the exposure duration
+op<-par(mfrow=c(2,1))
+#plot of the results for the male
+expobarplot<-barplot(data_expo[,c(1:11)],
+                     col=c("black","grey60","grey85"),border=NA,axes=FALSE,
+                     axisnames=FALSE,space=0.2,xpd=FALSE)
+axis(1,at=expobarplot,labels=FALSE,lwd=4,font=2,
      cex.axis=1.1,padj=0.1,xpd=TRUE,las=1)
-text(temp,par("usr")[1]-10,labels=names(effectif),srt=25,
+text(expobarplot,par("usr")[1]-1,labels=colnames(data_expo),srt=0,
      xpd=TRUE,cex=1.2,font=2)
 axis(2,lwd=4,font=2,cex.axis=1.2,las=1)
 box(bty="l",lwd=4)
-title(main=NULL,xlab="HDI class",ylab="% of countries",cex.lab=2,
-      line=3.5,font.lab=2)
+title(main="Male",xlab=NULL,ylab="Number of flies",cex.lab=1.5,
+      line=2,font.lab=2,cex.main=3)
+text(expobarplot-0.03,as.numeric(data_expo[1,c(1:11)])/2,
+     data_expo[1,c(1:11)],font=2,cex=2,xpd=TRUE,col="white")
+text(expobarplot-0.03,as.numeric(data_expo[1,c(1:11)]) + 
+       as.numeric(data_expo[2,c(1:11)])/2,
+     data_expo[2,c(1:11)],font=2,cex=2,xpd=TRUE,col="black")
+text(expobarplot-0.03,as.numeric(data_expo[1,c(1:11)]) + 
+       as.numeric(data_expo[2,c(1:11)]) + 
+       as.numeric(data_expo[3,c(1:11)])/2,
+     data_expo[3,c(1:11)],font=2,cex=2,xpd=TRUE,col="black")
 
+#plot of the results for the female
+expobarplot<-barplot(data_expo[,c(12:22)],
+                     col=c("black","grey60","grey85"),border=NA,axes=FALSE,
+                     axisnames=FALSE,space=0.2,xpd=FALSE)
+axis(1,at=expobarplot,labels=FALSE,lwd=4,font=2,
+     cex.axis=1.1,padj=0.1,xpd=TRUE,las=1)
+text(expobarplot,par("usr")[1]-1,labels=colnames(data_expo),srt=0,
+     xpd=TRUE,cex=1.2,font=2)
+axis(2,lwd=4,font=2,cex.axis=1.2,las=1)
+box(bty="l",lwd=4)
+title(main="Female",xlab=NULL,ylab="Number of flies",cex.lab=1.5,
+      line=2,font.lab=2,cex.main=3)
+text(expobarplot-0.03,as.numeric(data_expo[1,c(12:22)])/2,
+     data_expo[1,c(12:22)],font=2,cex=2,xpd=TRUE,col="white")
+text(expobarplot-0.03,as.numeric(data_expo[1,c(12:22)]) + 
+       as.numeric(data_expo[2,c(12:22)])/2,
+     data_expo[2,c(12:22)],font=2,cex=2,xpd=TRUE,col="black")
+text(expobarplot-0.03,as.numeric(data_expo[1,c(12:22)]) + 
+       as.numeric(data_expo[2,c(12:22)]) + 
+       as.numeric(data_expo[3,c(12:22)])/2,
+     data_expo[3,c(12:22)],font=2,cex=2,xpd=TRUE,col="black")
+par(op)
 
+#export to pdf 7 x 14 inches
 
 
 ###############################################################################
