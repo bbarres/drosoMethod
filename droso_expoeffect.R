@@ -24,21 +24,36 @@ plot(expo_mod,type="obs",add=TRUE)
 EDcomp(expo_mod,c(50,50))
 exporez<-ED(expo_mod,50,interval="delta",reference="control")
 
-
+plot(as.data.frame(exporez)$Estimate,ylim=c(0,0.3))
 
 #it seems that EDcomp is not working with LN models (see the help)? Therefore 
 #we can do the computation with LL instead (the results are quite similar 
-#anyway)
-expo_mod<-drm(dead/total~dose,weights=total,
-              data=expodata,curveid=repet,
-              fct=LL.3u(),
-              type="binomial")
-plot(expo_mod,type="confidence")
-plot(expo_mod,type="obs",add=TRUE)
-temp<-EDcomp(expo_mod,c(50,50))
-exporez<-ED(expo_mod,50,interval="delta",reference="control")
+#anyway). We also split male and female experiments because we shown that 
+#there was a significant difference of LD50 between the two sexes
 
-plot(as.data.frame(exporez)$Estimate,ylim=c(0,0.3))
+expodata_m<-expodata[expodata$sex=="male",]
+expo_m_mod<-drm(dead/total~dose,weights=total,
+                data=expodata_m,curveid=repet,
+                fct=LL.3u(),
+                type="binomial")
+plot(expo_m_mod,type="confidence")
+plot(expo_m_mod,type="obs",add=TRUE)
+temp<-EDcomp(expo_m_mod,c(50,50))
+as.data.frame(temp)[,4]<0.05
+exporez_m<-ED(expo_m_mod,50,interval="delta",reference="control")
+plot(as.data.frame(exporez_m)$Estimate,ylim=c(0,0.3))
+
+expodata_f<-expodata[expodata$sex=="female",]
+expo_f_mod<-drm(dead/total~dose,weights=total,
+                data=expodata_f,curveid=repet,
+                fct=LL.3u(),
+                type="binomial")
+plot(expo_f_mod,type="confidence")
+plot(expo_f_mod,type="obs",add=TRUE)
+temp<-EDcomp(expo_f_mod,c(50,50))
+as.data.frame(temp)[,4]<0.05
+exporez_f<-ED(expo_f_mod,50,interval="delta",reference="control")
+plot(as.data.frame(exporez_f)$Estimate,ylim=c(0,0.3))
 
 
 #performing a logistic regression to analyse both the sex and duration of 
