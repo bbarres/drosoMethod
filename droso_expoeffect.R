@@ -62,7 +62,6 @@ logmod<-glm(cbind(expodata$alive,expodata$dead)~dose*sex*exposition,
             family=binomial(link=probit),data=expodata)
 
 
-
 ###############################################################################
 #barplot of an example of evolution of the death rate at the dose 0.25mg/l
 ###############################################################################
