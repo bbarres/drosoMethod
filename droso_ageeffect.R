@@ -50,6 +50,15 @@ age_mod_m<-drm(dead/total~dose,weights=total,
 EDcomp(age_mod_m,c(50,50))
 agerez_m<-ED(age_mod_m,50,interval="delta",reference="control")
 
+#comparison of LD50 allowing different slope and "natural death"
+age_mod_me<-drm(dead/total~dose,weights=total,
+               data=agedata_m,curveid=age,
+               fct=LN.3u(),
+               type="binomial",
+               pmodels=list(~factor(age)-1, ~factor(age)-1, ~1))
+plot(age_mod_me)
+anova(age_mod_m,age_mod_me)
+
 #because there is a bug to display the 95CI with models using curveid,
 #we plot the different modality separately
 age_mod_m24<-drm(dead/total~dose,weights=total,

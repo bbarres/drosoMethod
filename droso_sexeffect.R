@@ -26,6 +26,15 @@ sex_mod<-drm(dead/total~dose,weights=total,
 EDcomp(sex_mod,c(50,50))
 sexrez<-ED(sex_mod,50,interval="delta",reference="control")
 
+#comparison of LD50 allowing different slope and "natural death"
+sex_mode<-drm(dead/total~dose,weights=total,
+             data=sexdata,curveid=sex,
+             fct=LN.3u(),
+             type="binomial",
+             pmodels=list(~factor(sex)-1, ~factor(sex)-1, ~1))
+plot(sex_mode)
+anova(sex_mod,sex_mode)
+
 #because there is a bug to display the 95CI with models using curveid,
 #we plot the different modality separately
 sex_mod_f<-drm(dead/total~dose,weights=total,
