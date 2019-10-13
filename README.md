@@ -1,5 +1,5 @@
 [![DOI](https://zenodo.org/badge/119716271.svg)](https://zenodo.org/badge/latestdoi/119716271)
-# How to create a reliable and reproducible insecticide resistance bioassay? An example on the worldwide invasive pest, *Drosophila suzukii*.
+# Supporting data and code for: How to create a reliable and reproducible insecticide resistance bioassay? An example on the worldwide invasive pest, *Drosophila suzukii*.
 *This repository contains the R code used for the data analyses and production of the figures of the related article*
 
 
@@ -44,8 +44,10 @@ The third file contains a table used to plot the radarplot for the Number of all
 + **droso_sexeffect.R:** the script to analyse the effect of the sex of *D. suzukii*  on the LD50 evaluation
 
 ## Citation
-You will soon be able (hopefully) to cite the related study as follow : 
+You will soon be able (hopefully) to cite the related study as follow: 
++Blouquy L., Mottet C., Olivares J., Plantamp C., Siegwart M. and Barrès B.
+[How to create a reliable and reproducible insecticide resistance bioassay? An example on the worldwide invasive pest, *Drosophila suzukii*.*submitted*]
 
-
-If you want to use (some of) the code found on this page or if you want to cite this repository : 
+If you want to use (some of) the code found on this page or if you want to cite this repository:
++Benoit Barrès. bbarres/bemisiaR: [Supporting data and code for: How to create a reliable and reproducible insecticide resistance bioassay? An example on the worldwide invasive pest, *Drosophila suzukii*. Zenodo; 2019.](https://zenodo.org/badge/latestdoi/119716271)
 
