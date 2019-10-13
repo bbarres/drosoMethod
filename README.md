@@ -46,7 +46,7 @@ The third file contains a table used to plot the radarplot for the Number of all
 ## Citation
 You will soon be able (hopefully) to cite the related study as follow: 
 + Blouquy L., Mottet C., Olivares J., Plantamp C., Siegwart M. and Barrès B.
-[How to create a reliable and reproducible insecticide resistance bioassay? An example on the worldwide invasive pest, *Drosophila suzukii*.*submitted*]
+[How to create a reliable and reproducible insecticide resistance bioassay? An example on the worldwide invasive pest, *Drosophila suzukii*. *submitted*]()
 
 If you want to use (some of) the code found on this page or if you want to cite this repository:
 + Benoit Barrès. bbarres/bemisiaR: [Supporting data and code for: How to create a reliable and reproducible insecticide resistance bioassay? An example on the worldwide invasive pest, *Drosophila suzukii*. Zenodo; 2019.](https://zenodo.org/badge/latestdoi/119716271)
