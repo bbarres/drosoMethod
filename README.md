@@ -7,7 +7,7 @@
 
 
 ## Context
-
+Bioassays are the golden standard for pesticide resistance assessment of pest. Developing or adapting a method for a new species or a new active substance can require a significant amount of work. Several parameters that can impact the reliability and precision of the bioassay shouldn't be overlooked during the setting of a new protocol. In this study, we exemplify the effect of three biological parameters (sex, age, and genetic diversity) and two technical parameters (number of individuals tested and duration of exposure) on the median lethal dose (LD50) evaluation of an invasive pest species, *Drosophila suzukii*. 
 
 ## Datasets
 There are three datasets used in this study. 
