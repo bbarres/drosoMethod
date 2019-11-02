@@ -63,6 +63,42 @@ logmod<-glm(cbind(expodata$alive,expodata$dead)~dose*sex*exposition,
 
 
 ##############################################################################/
+#Effect of the type of sampling environment on the LD50####
+##############################################################################/
+
+#fitting the "null hypothesis model"
+SmodB0<-drm(dead/total~dose,exposition,
+            weights=total,
+            data=expodata_f,
+            fct=LN.3u(),
+            type="binomial")
+summary(SmodB0)
+
+#testing the effect of the environment on LD50 (ie the 'e' parameter)
+SmodB1env<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=expodata_f,
+               fct=LN.3u(),
+               type="binomial",
+               pmodels=list(~1, ~1, ~exposition-1))
+summary(SmodB1env)
+compParm(SmodB1env,"e")
+anova(SmodB1env,SmodB0)
+
+#testing the effect of the population on LD50 (ie the 'e' parameter)
+SmodB1e<-drm(dead/total~dose,environment_type,
+             weights=total,
+             data=gamme[which(gamme$pesticide=="supreme" & 
+                                 gamme$species=="MEAM1"),],
+             fct=LN.3u(),
+             type="binomial",
+             pmodels=list(~population_ID-1, ~population_ID-1, ~1))
+summary(SmodB1e)
+anova(SmodB1e,SmodB0)
+
+
+
+##############################################################################/
 #barplot of an example of evolution of the death rate at the dose 0.25mg/l####
 ##############################################################################/
 
