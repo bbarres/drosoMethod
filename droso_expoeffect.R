@@ -70,29 +70,32 @@ logmod<-glm(cbind(expodata$alive,expodata$dead)~dose*sex*exposition,
 SmodB0<-drm(dead/total~dose,exposition,
             weights=total,
             data=expodata_f,
-            fct=LN.3u(),
+            fct=LL.3u(),
             type="binomial")
 summary(SmodB0)
+plot(SmodB0)
 
-#testing the effect of the environment on LD50 (ie the 'e' parameter)
+#testing for equality of slope
 SmodB1env<-drm(dead/total~dose,exposition,
                weights=total,
                data=expodata_f,
-               fct=LN.3u(),
+               fct=LL.3u(),
                type="binomial",
                pmodels=list(~1, ~1, ~exposition-1))
 summary(SmodB1env)
+plot(SmodB1env)
 compParm(SmodB1env,"e")
 anova(SmodB1env,SmodB0)
 
-#testing the effect of the population on LD50 (ie the 'e' parameter)
+#testing for equality of LD50
 SmodB1e<-drm(dead/total~dose,exposition,
              weights=total,
              data=expodata_f,
-             fct=LN.3u(),
+             fct=LL.3u(),
              type="binomial",
              pmodels=list(~exposition-1, ~1, ~1))
 summary(SmodB1e)
+plot(SmodB1e)
 anova(SmodB1e,SmodB0)
 
 
