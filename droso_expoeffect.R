@@ -86,13 +86,12 @@ compParm(SmodB1env,"e")
 anova(SmodB1env,SmodB0)
 
 #testing the effect of the population on LD50 (ie the 'e' parameter)
-SmodB1e<-drm(dead/total~dose,environment_type,
+SmodB1e<-drm(dead/total~dose,exposition,
              weights=total,
-             data=gamme[which(gamme$pesticide=="supreme" & 
-                                 gamme$species=="MEAM1"),],
+             data=expodata_f,
              fct=LN.3u(),
              type="binomial",
-             pmodels=list(~population_ID-1, ~population_ID-1, ~1))
+             pmodels=list(~exposition-1, ~1, ~1))
 summary(SmodB1e)
 anova(SmodB1e,SmodB0)
 
