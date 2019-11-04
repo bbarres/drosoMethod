@@ -17,7 +17,7 @@ expodata<-dataDroz[dataDroz$expo_comp==1,]
 #let's do a model for every repetition
 expo_mod<-drm(dead/total~dose,weights=total,
               data=expodata,curveid=repet,
-              fct=LN.3u(),
+              fct=LN.2(),
               type="binomial")
 plot(expo_mod,type="confidence")
 plot(expo_mod,type="obs",add=TRUE)
@@ -34,7 +34,7 @@ plot(as.data.frame(exporez)$Estimate,ylim=c(0,0.3))
 expodata_m<-expodata[expodata$sex=="male",]
 expo_m_mod<-drm(dead/total~dose,weights=total,
                 data=expodata_m,curveid=repet,
-                fct=LL.3u(),
+                fct=LN.2(),
                 type="binomial")
 plot(expo_m_mod,type="confidence")
 plot(expo_m_mod,type="obs",add=TRUE)
@@ -46,7 +46,7 @@ plot(as.data.frame(exporez_m)$Estimate,ylim=c(0,0.3))
 expodata_f<-expodata[expodata$sex=="female",]
 expo_f_mod<-drm(dead/total~dose,weights=total,
                 data=expodata_f,curveid=repet,
-                fct=LL.3u(),
+                fct=LN.2(),
                 type="binomial")
 plot(expo_f_mod,type="confidence")
 plot(expo_f_mod,type="obs",add=TRUE)
@@ -58,46 +58,53 @@ plot(as.data.frame(exporez_f)$Estimate,ylim=c(0,0.3))
 
 #performing a logistic regression to analyse both the sex and duration of 
 #exposure effects at the same time
-logmod<-glm(cbind(expodata$alive,expodata$dead)~dose*sex*exposition,
+logmod0<-glm(cbind(expodata$alive,expodata$dead)~dose*sex*exposition,
             family=binomial(link=probit),data=expodata)
+
+logmodN<-glm(cbind(expodata$alive,expodata$dead)~dose+sex+exposition,
+            family=binomial(link=probit),data=expodata)
+
+logmodN1<-glm(cbind(expodata$alive,expodata$dead)~dose+sex,
+             family=binomial(link=probit),data=expodata)
+
+anova(logmodN1,logmodN,test="Chisq")
 
 
 ##############################################################################/
-#Effect of the type of sampling environment on the LD50####
+#Effect of the exposure on ####
 ##############################################################################/
 
 #fitting the "null hypothesis model"
-SmodB0<-drm(dead/total~dose,exposition,
+expo_mod0<-drm(dead/total~dose,exposition,
             weights=total,
             data=expodata_f,
-            fct=LL.3u(),
+            fct=LN.2(),
             type="binomial")
-summary(SmodB0)
-plot(SmodB0)
+summary(expo_mod0)
+compParm(expo_mod0,"e")
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2))
 
 #testing for equality of slope
-SmodB1env<-drm(dead/total~dose,exposition,
+expo_mod1e<-drm(dead/total~dose,exposition,
                weights=total,
                data=expodata_f,
-               fct=LL.3u(),
+               fct=LN.2(),
                type="binomial",
-               pmodels=list(~1, ~1, ~exposition-1))
-summary(SmodB1env)
-plot(SmodB1env)
-compParm(SmodB1env,"e")
-anova(SmodB1env,SmodB0)
+               pmodels=list(~1, ~exposition-1))
+summary(expo_mod1e)
+plot(expo_mod1e,col=c(1,1,1,1,1,2,2,2,2,2))
+anova(expo_mod1e,expo_mod0) #there is a significant effect of the slope
 
 #testing for equality of LD50
-SmodB1e<-drm(dead/total~dose,exposition,
+expo_mod1b<-drm(dead/total~dose,exposition,
              weights=total,
              data=expodata_f,
-             fct=LL.3u(),
+             fct=LN.2(),
              type="binomial",
-             pmodels=list(~exposition-1, ~1, ~1))
-summary(SmodB1e)
-plot(SmodB1e)
-anova(SmodB1e,SmodB0)
-
+             pmodels=list(~exposition-1, ~1))
+summary(expo_mod1b)
+plot(expo_mod1b,col=c(1,1,1,1,1,2,2,2,2,2))
+anova(expo_mod1b,expo_mod0) #there is a significant effect of the DL50
 
 
 ##############################################################################/
