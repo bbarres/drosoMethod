@@ -71,8 +71,30 @@ anova(logmodN1,logmodN,test="Chisq")
 
 
 ##############################################################################/
-#Effect of the exposure on ####
+#Effect of the exposure on the LD50 estimation: female####
 ##############################################################################/
+
+#testing for equality of slope
+expo_mod1e<-drm(dead/total~dose,exposition,
+                weights=total,
+                data=expodata_f,
+                fct=LN.2(),
+                type="binomial",
+                pmodels=list(~1, ~exposition-1))
+summary(expo_mod1e)
+plot(expo_mod1e,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
+anova(expo_mod1e,expo_mod0) #there is a significant effect of the slope
+
+#testing for equality of LD50
+expo_mod1b<-drm(dead/total~dose,exposition,
+                weights=total,
+                data=expodata_f,
+                fct=LN.2(),
+                type="binomial",
+                pmodels=list(~exposition-1, ~1))
+summary(expo_mod1b)
+plot(expo_mod1b,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
+anova(expo_mod1b,expo_mod0) #there is a significant effect of the LD50
 
 #fitting the "null hypothesis model"
 expo_mod0<-drm(dead/total~dose,exposition,
@@ -81,30 +103,49 @@ expo_mod0<-drm(dead/total~dose,exposition,
             fct=LN.2(),
             type="binomial")
 summary(expo_mod0)
+#comparing the LD50 between the different time of exposure
 compParm(expo_mod0,"e")
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2))
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
+
+
+##############################################################################/
+#Effect of the exposure on the LD50 estimation: male####
+##############################################################################/
+
+#fitting the "null hypothesis model"
+expo_mod0m<-drm(dead/total~dose,exposition,
+                weights=total,
+                data=expodata_m,
+                fct=LN.2(),
+                type="binomial")
+summary(expo_mod0m)
+plot(expo_mod0m,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
 
 #testing for equality of slope
-expo_mod1e<-drm(dead/total~dose,exposition,
-               weights=total,
-               data=expodata_f,
-               fct=LN.2(),
-               type="binomial",
-               pmodels=list(~1, ~exposition-1))
-summary(expo_mod1e)
-plot(expo_mod1e,col=c(1,1,1,1,1,2,2,2,2,2))
-anova(expo_mod1e,expo_mod0) #there is a significant effect of the slope
+expo_mod1em<-drm(dead/total~dose,exposition,
+                weights=total,
+                data=expodata_m,
+                fct=LN.2(),
+                type="binomial",
+                pmodels=list(~1, ~exposition-1))
+summary(expo_mod1em)
+plot(expo_mod1em,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
+anova(expo_mod1em,expo_mod0m) #there is a significant effect of the slope
 
 #testing for equality of LD50
-expo_mod1b<-drm(dead/total~dose,exposition,
-             weights=total,
-             data=expodata_f,
-             fct=LN.2(),
-             type="binomial",
-             pmodels=list(~exposition-1, ~1))
-summary(expo_mod1b)
-plot(expo_mod1b,col=c(1,1,1,1,1,2,2,2,2,2))
-anova(expo_mod1b,expo_mod0) #there is a significant effect of the DL50
+expo_mod1bm<-drm(dead/total~dose,exposition,
+                weights=total,
+                data=expodata_m,
+                fct=LN.2(),
+                type="binomial",
+                pmodels=list(~exposition-1, ~1))
+summary(expo_mod1bm)
+plot(expo_mod1bm,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
+anova(expo_mod1bm,expo_mod0m) #there is a significant effect of the LD50
+
+#comparing the LD50 between the different time of exposure on the full model
+compParm(expo_mod0m,"e")
+plot(expo_mod0m,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
 
 
 ##############################################################################/
