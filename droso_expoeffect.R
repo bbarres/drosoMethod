@@ -74,6 +74,15 @@ anova(logmodN1,logmodN,test="Chisq")
 #Effect of the exposure on the LD50 estimation: female####
 ##############################################################################/
 
+#fitting the "null hypothesis model"
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=expodata_f,
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
+
 #testing for equality of slope
 expo_mod1e<-drm(dead/total~dose,exposition,
                 weights=total,
@@ -96,14 +105,7 @@ summary(expo_mod1b)
 plot(expo_mod1b,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
 anova(expo_mod1b,expo_mod0) #there is a significant effect of the LD50
 
-#fitting the "null hypothesis model"
-expo_mod0<-drm(dead/total~dose,exposition,
-            weights=total,
-            data=expodata_f,
-            fct=LN.2(),
-            type="binomial")
-summary(expo_mod0)
-#comparing the LD50 between the different time of exposure
+#comparing the LD50 between the different time of exposure on the full model
 compParm(expo_mod0,"e")
 plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
 
