@@ -55,7 +55,6 @@ as.data.frame(temp)[,4]<0.05
 exporez_f<-ED(expo_f_mod,50,interval="delta",reference="control")
 plot(as.data.frame(exporez_f)$Estimate,ylim=c(0,0.3))
 
-
 #performing a logistic regression to analyse both the sex and duration of 
 #exposure effects at the same time
 logmod0<-glm(cbind(expodata$alive,expodata$dead)~dose*sex*exposition,
@@ -107,7 +106,7 @@ anova(expo_mod1b,expo_mod0) #there is a significant effect of the LD50
 
 #comparing the LD50 between the different time of exposure on the full model
 compParm(expo_mod0,"e")
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),lwd=2)
 
 
 ##############################################################################/
@@ -206,6 +205,30 @@ text(expobarplot-0.03,as.numeric(data_expo[1,c(12:22)]) +
 par(op)
 
 #export to pdf 7 x 14 inches
+
+
+##############################################################################/
+#tentative heatmap to represent the significant differences between LD50####
+##############################################################################/
+
+temp<-compParm(expo_mod0,"e")
+temp<-cbind(matrix(unlist(strsplit(row.names(temp),"/")),45,byrow=TRUE),
+            temp[,4])
+temp<-rbind(temp,temp[,c(2,1,3)])
+temp<-spread(data.frame(temp),2,3,fill="NA")
+row.names(temp)<-as.character(temp[,1])
+temp<-temp[,c(-1)]
+temp<-temp[c(1,7,8,9,10,2:6),c(1,7,8,9,10,2:6)]
+logtemp<-abs(log(matrix(as.numeric(as.matrix(temp)),10,byrow=TRUE)))
+logtemp<-logtemp/max(logtemp,na.rm=TRUE)
+
+heatmap(logtemp,Rowv=NA,Colv=NA)
+
+chaudemap<-LDheatmap(logtemp,
+                  title=NULL,add.map=FALSE,distances=NULL,
+                  SNP.name=NULL,color=grey.colors(6),name="CHR",flip=FALSE,
+                  add.key=TRUE)
+grid.edit(gPath("CHR","heatMap","heatmap"),gp=gpar(col="white",lwd=1))
 
 
 ##############################################################################/
