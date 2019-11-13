@@ -215,10 +215,29 @@ temp<-compParm(expo_mod0,"e")
 temp<-cbind(matrix(unlist(strsplit(row.names(temp),"/")),45,byrow=TRUE),
             temp[,4])
 temp<-rbind(temp,temp[,c(2,1,3)])
-temp<-spread(data.frame(temp),2,3,fill="NA")
+temp<-spread(data.frame(temp),2,3,fill="NA",convert=TRUE)
+#changing the rownames
 row.names(temp)<-as.character(temp[,1])
+#removing the first unnecessary column
 temp<-temp[,c(-1)]
-temp<-temp[c(1,7,8,9,10,2:6),c(1,7,8,9,10,2:6)]
+#reordering the columns and turning the object into a matrix
+temp<-as.matrix(temp[c(1,7,8,9,10,2:6),c(1,7,8,9,10,2:6)])
+temp[temp>0.5]<-0.9
+temp[temp>0.10 & temp<0.9]<-0.8
+temp[temp>0.05 & temp<0.8]<-0.6
+temp[temp>0.01 & temp<0.6]<-0.4
+temp[temp>0.001 & temp<0.4]<-0.2
+temp[temp<0.001]<-0.1
+
+chaudemap<-LDheatmap(temp,title=NULL,add.map=FALSE,distances=NULL,
+                     SNP.name=row.names(temp),
+                     color=brewer.pal(6,"YlOrRd")[1:6],name="CHR",
+                     flip=FALSE,add.key=TRUE)
+grid.edit(gPath("CHR","heatMap","heatmap"),gp=gpar(col="white",lwd=1))
+
+
+
+
 logtemp<-abs(log(matrix(as.numeric(as.matrix(temp)),10,byrow=TRUE)))
 logtemp<-logtemp/max(logtemp,na.rm=TRUE)
 
