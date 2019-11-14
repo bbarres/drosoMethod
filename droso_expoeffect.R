@@ -234,9 +234,14 @@ chaudemap<-LDheatmap(temp,title=NULL,add.map=FALSE,distances=NULL,
                      color=brewer.pal(6,"YlOrRd")[1:6],name="CHR",
                      flip=FALSE,add.key=FALSE)
 grid.edit(gPath("CHR","heatMap","heatmap"),gp=gpar(col="white",lwd=1))
-grid.edit(gPath("CHR","SNPnames"),gp=gpar(col="black",rot="0"),rot=0)
+grid.edit(gPath("CHR","SNPnames"),gp=gpar(col="black",rot="0"),
+          rot=0,hjust=NULL)
+grid.lines(x=unit(c(0.1,0.5),"npc"),y=unit(c(0.5,0.5),"npc"),
+           gp=gpar(lwd=3))
+grid.lines(x=unit(c(0.5,0.5),"npc"),y=unit(c(0.5,0.9),"npc"),
+           gp=gpar(lwd=3))
 
-
+#export to pdf 4 x 4 inches
 
 logtemp<-abs(log(matrix(as.numeric(as.matrix(temp)),10,byrow=TRUE)))
 logtemp<-logtemp/max(logtemp,na.rm=TRUE)
