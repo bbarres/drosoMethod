@@ -158,7 +158,7 @@ data_expo<-t(data_expo[,c(6:3,1)])
 colnames(data_expo)<-data_expo[5,]
 
 #the supplementary figure for the exposure duration
-op<-par(mfrow=c(2,1))
+op<-par(mfcol=c(2,1))
 #plot of the results for the male
 expobarplot<-barplot(data_expo[,c(1:11)],
                      col=c("black","grey60","grey85"),border=NA,axes=FALSE,
@@ -208,7 +208,7 @@ par(op)
 
 
 ##############################################################################/
-#tentative heatmap to represent the significant differences between LD50####
+#heatmap to represent the significant differences between LD50####
 ##############################################################################/
 
 temp<-compParm(expo_mod0,"e")
@@ -222,6 +222,7 @@ row.names(temp)<-as.character(temp[,1])
 temp<-temp[,c(-1)]
 #reordering the columns and turning the object into a matrix
 temp<-as.matrix(temp[c(1,7,8,9,10,2:6),c(1,7,8,9,10,2:6)])
+#scaling the p-value so it is easily usable with the LDheatmap function
 temp[temp>0.5]<-0.9
 temp[temp>0.10 & temp<0.9]<-0.8
 temp[temp>0.05 & temp<0.8]<-0.6
@@ -229,30 +230,19 @@ temp[temp>0.01 & temp<0.6]<-0.4
 temp[temp>0.001 & temp<0.4]<-0.2
 temp[temp<0.001]<-0.1
 
-chaudemap<-LDheatmap(temp,title=NULL,add.map=FALSE,distances=NULL,
-                     SNP.name=row.names(temp),
-                     color=brewer.pal(6,"YlOrRd")[1:6],name="CHR",
-                     flip=FALSE,add.key=FALSE)
+chaudemap<-LDheatmap(temp,title=NULL,
+                     add.map=FALSE,distances=NULL,SNP.name=row.names(temp),
+                     color=brewer.pal(6,"YlOrRd")[c(1,1,1,4,5,6)],
+                     name="CHR",flip=FALSE,add.key=FALSE)
 grid.edit(gPath("CHR","heatMap","heatmap"),gp=gpar(col="white",lwd=1))
 grid.edit(gPath("CHR","SNPnames"),gp=gpar(col="black",rot="0"),
-          rot=0,hjust=NULL)
+          rot=0,hjust=0.7)
 grid.lines(x=unit(c(0.1,0.5),"npc"),y=unit(c(0.5,0.5),"npc"),
            gp=gpar(lwd=3))
 grid.lines(x=unit(c(0.5,0.5),"npc"),y=unit(c(0.5,0.9),"npc"),
            gp=gpar(lwd=3))
 
-#export to pdf 4 x 4 inches
-
-logtemp<-abs(log(matrix(as.numeric(as.matrix(temp)),10,byrow=TRUE)))
-logtemp<-logtemp/max(logtemp,na.rm=TRUE)
-
-heatmap(logtemp,Rowv=NA,Colv=NA)
-
-chaudemap<-LDheatmap(logtemp,
-                  title=NULL,add.map=FALSE,distances=NULL,
-                  SNP.name=NULL,color=grey.colors(6),name="CHR",flip=FALSE,
-                  add.key=TRUE)
-grid.edit(gPath("CHR","heatMap","heatmap"),gp=gpar(col="white",lwd=1))
+#export to pdf 7 x 7 inches
 
 
 ##############################################################################/
