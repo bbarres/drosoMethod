@@ -232,7 +232,8 @@ temp[temp<0.001]<-0.1
 
 chaudemap<-LDheatmap(temp,title=NULL,
                      add.map=FALSE,distances=NULL,SNP.name=row.names(temp),
-                     color=brewer.pal(6,"YlOrRd")[c(1,1,1,4,5,6)],
+                     color=c(rep(grey(0.8),3),
+                             brewer.pal(6,"YlOrRd")[c(4,5,6)]),
                      name="CHR",flip=FALSE,add.key=FALSE)
 grid.edit(gPath("CHR","heatMap","heatmap"),gp=gpar(col="white",lwd=1))
 grid.edit(gPath("CHR","SNPnames"),gp=gpar(col="black",rot="0"),
