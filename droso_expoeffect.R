@@ -106,7 +106,13 @@ anova(expo_mod1b,expo_mod0) #there is a significant effect of the LD50
 
 #comparing the LD50 between the different time of exposure on the full model
 compParm(expo_mod0,"e")
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),lwd=2)
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),lwd=1.5,
+     legendPos=c(15,0.7),xlab="dose (mg/L)")
+arrows(x0=expo_mod0$parmMat[2,1],y0=0.5,
+       x1=expo_mod0$parmMat[2,4],y1=0.5,
+       length=0.12,angle=25,lwd=3)
+
+#export to pdf 7 x 7 inches
 
 
 ##############################################################################/
@@ -233,7 +239,7 @@ temp[temp<0.001]<-0.1
 chaudemap<-LDheatmap(temp,title=NULL,
                      add.map=FALSE,distances=NULL,SNP.name=row.names(temp),
                      color=c(rep(grey(0.8),3),
-                             brewer.pal(6,"YlOrRd")[c(4,5,6)]),
+                             brewer.pal(6,"YlOrRd")[c(2,4,6)]),
                      name="CHR",flip=FALSE,add.key=FALSE)
 grid.edit(gPath("CHR","heatMap","heatmap"),gp=gpar(col="white",lwd=1))
 grid.edit(gPath("CHR","SNPnames"),gp=gpar(col="black",rot="0"),
