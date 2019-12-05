@@ -106,11 +106,13 @@ anova(expo_mod1b,expo_mod0) #there is a significant effect of the LD50
 
 #comparing the LD50 between the different time of exposure on the full model
 compParm(expo_mod0,"e")
+op<-par(mar=c(5.1,5.1,4.1,2.1))
 plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),lwd=1.5,
-     legendPos=c(15,0.7),xlab="dose (mg/L)")
+     legendPos=c(15,0.7),xlab="dose (mg/L)",cex.axis=1.5,cex.lab=2,cex=2)
 arrows(x0=expo_mod0$parmMat[2,1],y0=0.5,
        x1=expo_mod0$parmMat[2,4],y1=0.5,
        length=0.12,angle=25,lwd=3)
+par(op)
 
 #export to pdf 7 x 7 inches
 
@@ -255,3 +257,84 @@ grid.lines(x=unit(c(0.5,0.5),"npc"),y=unit(c(0.5,0.9),"npc"),
 ##############################################################################/
 #END
 ##############################################################################/
+
+
+
+##############################################################################/
+#Final plot examplifying effect of time of exposure
+##############################################################################/
+
+#plot of the results for the female
+expobarplot<-barplot(data_expo[,c(12:22)],
+                     col=c("black","grey60","grey85"),border=NA,axes=FALSE,
+                     axisnames=FALSE,space=0.2,xpd=FALSE)
+axis(1,at=expobarplot,labels=FALSE,lwd=4,font=2,
+     cex.axis=1.1,padj=0.1,xpd=TRUE,las=1)
+text(expobarplot,par("usr")[1]-1,labels=colnames(data_expo),srt=0,
+     xpd=TRUE,cex=1.2,font=2)
+axis(2,lwd=4,font=2,cex.axis=1.2,las=1)
+box(bty="l",lwd=4)
+title(main="dose = 0.25 mg/L",xlab=NULL,ylab="Number of flies",cex.lab=1.5,
+      line=2,font.lab=2,cex.main=3)
+text(expobarplot-0.03,as.numeric(data_expo[1,c(12:22)])/2,
+     data_expo[1,c(12:22)],font=2,cex=2,xpd=TRUE,col="white")
+text(expobarplot-0.03,as.numeric(data_expo[1,c(12:22)]) + 
+        as.numeric(data_expo[2,c(12:22)])/2,
+     data_expo[2,c(12:22)],font=2,cex=2,xpd=TRUE,col="black")
+text(expobarplot-0.03,as.numeric(data_expo[1,c(12:22)]) + 
+        as.numeric(data_expo[2,c(12:22)]) + 
+        as.numeric(data_expo[3,c(12:22)])/2,
+     data_expo[3,c(12:22)],font=2,cex=2,xpd=TRUE,col="black")
+
+#export to pdf 7 x 7 inches
+
+
+#comparison of the regression curves for the different reading time
+op<-par(mar=c(5.1,5.1,4.1,2.1))
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),lwd=1.5,
+     legendPos=c(15,0.7),xlab="dose (mg/L)",cex.axis=1.5,cex.lab=2,cex=2)
+arrows(x0=expo_mod0$parmMat[2,1],y0=0.5,
+       x1=expo_mod0$parmMat[2,4],y1=0.5,
+       length=0.12,angle=25,lwd=3)
+par(op)
+#export to pdf 7 x 7 inches
+
+
+#heatmap displaying the level of significance of the different LD50 at 
+#different reading time
+temp<-compParm(expo_mod0,"e")
+temp<-cbind(matrix(unlist(strsplit(row.names(temp),"/")),45,byrow=TRUE),
+            temp[,4])
+temp<-rbind(temp,temp[,c(2,1,3)])
+temp<-spread(data.frame(temp),2,3,fill="NA",convert=TRUE)
+#changing the rownames
+row.names(temp)<-as.character(temp[,1])
+#removing the first unnecessary column
+temp<-temp[,c(-1)]
+#reordering the columns and turning the object into a matrix
+temp<-as.matrix(temp[c(1,7,8,9,10,2:6),c(1,7,8,9,10,2:6)])
+#scaling the p-value so it is easily usable with the LDheatmap function
+temp[temp>0.5]<-0.9
+temp[temp>0.10 & temp<0.9]<-0.8
+temp[temp>0.05 & temp<0.8]<-0.6
+temp[temp>0.01 & temp<0.6]<-0.4
+temp[temp>0.001 & temp<0.4]<-0.2
+temp[temp<0.001]<-0.1
+
+chaudemap<-LDheatmap(temp,title=NULL,
+                     add.map=FALSE,distances=NULL,SNP.name=row.names(temp),
+                     color=c(rep(grey(0.8),3),
+                             brewer.pal(6,"YlOrRd")[c(2,4,6)]),
+                     name="CHR",flip=FALSE,add.key=FALSE)
+grid.edit(gPath("CHR","heatMap","heatmap"),gp=gpar(col="white",lwd=1))
+grid.edit(gPath("CHR","SNPnames"),gp=gpar(col="black",rot="0"),
+          rot=0,hjust=0.7)
+grid.lines(x=unit(c(0.1,0.5),"npc"),y=unit(c(0.5,0.5),"npc"),
+           gp=gpar(lwd=3))
+grid.lines(x=unit(c(0.5,0.5),"npc"),y=unit(c(0.5,0.9),"npc"),
+           gp=gpar(lwd=3))
+
+#export to pdf 7 x 7 inches
+
+
+
