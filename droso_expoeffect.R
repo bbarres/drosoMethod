@@ -274,8 +274,8 @@ text(expobarplot,par("usr")[1]-1,labels=colnames(data_expo),srt=0,
      xpd=TRUE,cex=1.2,font=2)
 axis(2,lwd=4,font=2,cex.axis=1.2,las=1)
 box(bty="l",lwd=4)
-title(main="dose = 0.25 mg/L",xlab=NULL,ylab="Number of flies",cex.lab=1.5,
-      line=2,font.lab=2,cex.main=3)
+title(main="dose = 0.25 mg/L",xlab=NULL,ylab="Number of flies",cex.lab=2,
+      line=2,font.lab=2,cex.main=2)
 text(expobarplot-0.03,as.numeric(data_expo[1,c(12:22)])/2,
      data_expo[1,c(12:22)],font=2,cex=2,xpd=TRUE,col="white")
 text(expobarplot-0.03,as.numeric(data_expo[1,c(12:22)]) + 
@@ -292,10 +292,12 @@ text(expobarplot-0.03,as.numeric(data_expo[1,c(12:22)]) +
 #comparison of the regression curves for the different reading time
 op<-par(mar=c(5.1,5.1,4.1,2.1))
 plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),lwd=1.5,
-     legendPos=c(15,0.7),xlab="dose (mg/L)",cex.axis=1.5,cex.lab=2,cex=2)
+     legendPos=c(15,0.7),xlab="dose (mg/L)",cex.axis=1.5,cex.lab=2,
+     cex=2,axes=TRUE)
 arrows(x0=expo_mod0$parmMat[2,1],y0=0.5,
        x1=expo_mod0$parmMat[2,4],y1=0.5,
        length=0.12,angle=25,lwd=3)
+box(bty="o",lwd=4)
 par(op)
 #export to pdf 7 x 7 inches
 
