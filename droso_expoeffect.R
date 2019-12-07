@@ -265,17 +265,18 @@ grid.lines(x=unit(c(0.5,0.5),"npc"),y=unit(c(0.5,0.9),"npc"),
 ##############################################################################/
 
 #plot of the results for the female
-expobarplot<-barplot(data_expo[,c(12:22)],
-                     col=c("black","grey60","grey85"),border=NA,axes=FALSE,
-                     axisnames=FALSE,space=0.2,xpd=FALSE)
+op<-par(mar=c(5.1,5.1,4.1,2.1))
+expobarplot<-barplot(data_expo[,c(12:22)],col=c("black","grey60","grey85"),
+                     border=NA,axes=FALSE,axisnames=FALSE,space=0.2,
+                     xpd=FALSE)
 axis(1,at=expobarplot,labels=FALSE,lwd=4,font=2,
-     cex.axis=1.1,padj=0.1,xpd=TRUE,las=1)
-text(expobarplot,par("usr")[1]-1,labels=colnames(data_expo),srt=0,
-     xpd=TRUE,cex=1.2,font=2)
-axis(2,lwd=4,font=2,cex.axis=1.2,las=1)
+     cex.axis=1.5,padj=0.1,xpd=TRUE,las=1)
+text(expobarplot,par("usr")[1]-1.3,labels=colnames(data_expo),srt=0,
+     xpd=TRUE,cex=1.4,font=2)
+axis(2,lwd=4,font=2,cex.axis=1.5,las=1)
 box(bty="l",lwd=4)
 title(main="dose = 0.25 mg/L",xlab=NULL,ylab="Number of flies",cex.lab=2,
-      line=2,font.lab=2,cex.main=2)
+      line=2.5,font.lab=2,cex.main=1.5)
 text(expobarplot-0.03,as.numeric(data_expo[1,c(12:22)])/2,
      data_expo[1,c(12:22)],font=2,cex=2,xpd=TRUE,col="white")
 text(expobarplot-0.03,as.numeric(data_expo[1,c(12:22)]) + 
@@ -285,19 +286,22 @@ text(expobarplot-0.03,as.numeric(data_expo[1,c(12:22)]) +
         as.numeric(data_expo[2,c(12:22)]) + 
         as.numeric(data_expo[3,c(12:22)])/2,
      data_expo[3,c(12:22)],font=2,cex=2,xpd=TRUE,col="black")
-
+par(op)
 #export to pdf 7 x 7 inches
 
 
 #comparison of the regression curves for the different reading time
 op<-par(mar=c(5.1,5.1,4.1,2.1))
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),lwd=1.5,
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),lwd=1.5,bp=1e-3,
      legendPos=c(15,0.7),xlab="dose (mg/L)",cex.axis=1.5,cex.lab=2,
-     cex=2,axes=TRUE)
+     cex=2,axes=FALSE,font.lab=2,font.axis=2,font=2,bty="n")
 arrows(x0=expo_mod0$parmMat[2,1],y0=0.5,
        x1=expo_mod0$parmMat[2,4],y1=0.5,
        length=0.12,angle=25,lwd=3)
-box(bty="o",lwd=4)
+axis(1,at=c(0.001,0.01,0.1,1,10),labels=c("0","0.01","0.1","1","10"),
+     lwd=4,font=2,cex.axis=1.5,padj=0.1,xpd=TRUE,las=1)
+axis(2,lwd=4,font=2,cex.axis=1.5,las=1)
+box(bty="l",lwd=4)
 par(op)
 #export to pdf 7 x 7 inches
 
@@ -322,20 +326,20 @@ temp[temp>0.05 & temp<0.8]<-0.6
 temp[temp>0.01 & temp<0.6]<-0.4
 temp[temp>0.001 & temp<0.4]<-0.2
 temp[temp<0.001]<-0.1
-
+#the plotting start now
 chaudemap<-LDheatmap(temp,title=NULL,
                      add.map=FALSE,distances=NULL,SNP.name=row.names(temp),
                      color=c(rep(grey(0.8),3),
                              brewer.pal(6,"YlOrRd")[c(2,4,6)]),
                      name="CHR",flip=FALSE,add.key=FALSE)
 grid.edit(gPath("CHR","heatMap","heatmap"),gp=gpar(col="white",lwd=1))
-grid.edit(gPath("CHR","SNPnames"),gp=gpar(col="black",rot="0"),
-          rot=0,hjust=0.7)
+grid.edit(gPath("CHR","SNPnames"),
+          gp=gpar(col="black",rot="0",cex=0.9,font=2),
+          rot=0,hjust=0.6)
 grid.lines(x=unit(c(0.1,0.5),"npc"),y=unit(c(0.5,0.5),"npc"),
            gp=gpar(lwd=3))
 grid.lines(x=unit(c(0.5,0.5),"npc"),y=unit(c(0.5,0.9),"npc"),
            gp=gpar(lwd=3))
-
 #export to pdf 7 x 7 inches
 
 
