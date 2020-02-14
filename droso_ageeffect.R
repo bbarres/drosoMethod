@@ -12,7 +12,7 @@ source("droso_data_load.R")
 ##############################################################################/
 
 #we select the data of phosmet test with the St Foy population, with different
-#age classes
+#age classes and we split it between males and females
 agedata<-dataDroz[dataDroz$age_comp==1,]
 agedata_f<-agedata[agedata$sex=="female",]
 agedata_m<-agedata[agedata$sex=="male",]
@@ -26,8 +26,8 @@ age_mod_f<-drm(dead/total~dose,weights=total,
 EDcomp(age_mod_f,c(50,50))
 agerez_f<-ED(age_mod_f,50,interval="delta",reference="control")
 
-#because there is a problem to display the 95CI with models using curveid,
-#we plot the different modality separately
+#because it seems there is a problem to display the 95CI with models using 
+#the curveid parameter, #we plot the different modality separately
 age_mod_f24<-drm(dead/total~dose,weights=total,
                  data=agedata_f[agedata_f$age=="0-24h",],
                  fct=LN.3u(),
@@ -59,8 +59,8 @@ age_mod_me<-drm(dead/total~dose,weights=total,
 plot(age_mod_me)
 anova(age_mod_m,age_mod_me)
 
-#because there is a bug to display the 95CI with models using curveid,
-#we plot the different modality separately
+#because it seems there is a problem to display the 95CI with models using 
+#the curveid parameter, #we plot the different modality separately
 age_mod_m24<-drm(dead/total~dose,weights=total,
                  data=agedata_m[agedata_m$age=="0-24h",],
                  fct=LN.3u(),
@@ -73,6 +73,11 @@ age_mod_m96<-drm(dead/total~dose,weights=total,
                  data=agedata_m[agedata_m$age=="72-96h",],
                  fct=LN.3u(),
                  type="binomial")
+
+
+##############################################################################/
+#Code for plotting the Figure 2####
+##############################################################################/
 
 #code for the plot comparing the different age categories of the same
 #population, for male and female
