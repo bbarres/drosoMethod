@@ -14,6 +14,8 @@ source("droso_data_load.R")
 #we select the data of phosmet test with the St Foy population, with different
 #age classes and we split it between males and females
 agedata<-dataDroz[dataDroz$age_comp==1,]
+#aggregate the data
+agedata<-aggregate(cbind(dead,total)~dose+sex+age,data=agedata,"sum")
 agedata_f<-agedata[agedata$sex=="female",]
 agedata_m<-agedata[agedata$sex=="male",]
 
@@ -23,7 +25,10 @@ age_mod_f<-drm(dead/total~dose,weights=total,
                data=agedata_f,curveid=age,
                fct=LN.3u(),
                type="binomial")
-EDcomp(age_mod_f,c(50,50))
+#testing the goodness-of-fit of the model
+modelFit(age_mod_f)
+#comparing the LD50
+compParm(age_mod_f,"e")
 agerez_f<-ED(age_mod_f,50,interval="delta",reference="control")
 
 #because it seems there is a problem to display the 95CI with models using 
@@ -47,7 +52,10 @@ age_mod_m<-drm(dead/total~dose,weights=total,
                data=agedata_m,curveid=age,
                fct=LN.3u(),
                type="binomial")
-EDcomp(age_mod_m,c(50,50))
+#testing the goodness-of-fit of the model
+modelFit(age_mod_m)
+#comparing the LD50
+compParm(age_mod_m,"e")
 agerez_m<-ED(age_mod_m,50,interval="delta",reference="control")
 
 #comparison of LD50 allowing different slope and "natural death"
@@ -124,7 +132,7 @@ plot(age_mod_m96,type="obs",add=TRUE,pch=24,cex=2,
 title(xlab="Dose (mg/l)",ylab="Mortality rate",cex.lab=2,font.lab=2)
 text(1.5,y=0.85,labels='\\MA',vfont=c("sans serif","bold"),cex=5)
 par(op)
-#export .pdf 10*14 inches
+#export to pdf 10*14 inches
 
 
 ##############################################################################/

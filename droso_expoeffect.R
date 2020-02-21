@@ -67,7 +67,7 @@ op<-par(mar=c(5.1,5.1,4.1,2.1))
 plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),lwd=1.5,
      legendPos=c(15,0.7),xlab="dose (mg/L)",cex.axis=1.5,cex.lab=2,cex=2)
 arrows(x0=expo_mod0$parmMat[2,1],y0=0.5,
-       x1=expo_mod0$parmMat[2,4],y1=0.5,
+       x1=expo_mod0$parmMat[2,5],y1=0.5,
        length=0.12,angle=25,lwd=3)
 par(op)
 
@@ -75,10 +75,10 @@ par(op)
 
 
 ##############################################################################/
-#Final plots examplifying effect of time of exposure
+#Figure 6: final plots examplifying effect of time of exposure
 ##############################################################################/
 
-#plot of the results for the female at dose 0.25 mg/L
+#plot of the raw results for the female at dose 0.25 mg/L
 op<-par(mar=c(5.1,5.1,4.1,2.1))
 expobarplot<-barplot(data_expo[,c(12:22)],col=c("black","grey60","grey85"),
                      border=NA,axes=FALSE,axisnames=FALSE,space=0.2,
@@ -109,7 +109,7 @@ plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),lwd=1.5,bp=1e-3,
      legendPos=c(15,0.7),xlab="dose (mg/L)",cex.axis=1.5,cex.lab=2,
      cex=2,axes=FALSE,font.lab=2,font.axis=2,font=2,bty="n")
 arrows(x0=expo_mod0$parmMat[2,1],y0=0.5,
-       x1=expo_mod0$parmMat[2,4],y1=0.5,
+       x1=expo_mod0$parmMat[2,5],y1=0.5,
        length=0.12,angle=25,lwd=3)
 axis(1,at=c(0.001,0.01,0.1,1,10),labels=c("0","0.01","0.1","1","10"),
      lwd=4,font=2,cex.axis=1.5,padj=0.1,xpd=TRUE,las=1)

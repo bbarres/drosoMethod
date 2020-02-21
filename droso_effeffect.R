@@ -40,7 +40,7 @@ results<- merge(checkdat,REZdroz,by.x="repet",by.y="date",all=FALSE)
 
 
 ##############################################################################/
-#Scatter plot of the LD50 analysis with different number of fly per dose####
+#Figure 5: Scatter plot of the LD50 with different number of fly per dose####
 ##############################################################################/
 
 legx<-expression(bold("Mean number of ")*bolditalic("D. suzukii ")*
@@ -109,7 +109,7 @@ plotCI(results$total[results$sex=="male"],
        add=TRUE,cex=2,pch=24,col=rgb(0,0,0,1),pt.bg=rgb(1,1,1,1.0),
        gap=0.011)
 par(op)
-#export .pdf 15*7 inches
+#export to pdf 15*7 inches
 
 
 ##############################################################################/

@@ -9,12 +9,14 @@ source("droso_data_load.R")
 
 
 ##############################################################################/
-#Is there a difference of DL50 between male and female?####
+#Is there a difference of LD50 between male and female?####
 ##############################################################################/
 
 #we select the data of phosmet tests with the St Foy population, with
 #flies of 24-48 hours age
 sexdata<-dataDroz[dataDroz$number_comp==1,]
+#aggregate the data
+sexdata<-aggregate(cbind(dead,total)~dose+sex,data=sexdata,"sum")
 sexdata_f<-sexdata[sexdata$sex=="female",]
 sexdata_m<-sexdata[sexdata$sex=="male",]
 
@@ -23,7 +25,10 @@ sex_mod<-drm(dead/total~dose,weights=total,
              data=sexdata,curveid=sex,
              fct=LN.3u(),
              type="binomial")
-EDcomp(sex_mod,c(50,50))
+#testing the goodness-of-fit of the model
+modelFit(sex_mod)
+#comparing the LD50
+compParm(sex_mod,"e")
 sexrez<-ED(sex_mod,50,interval="delta",reference="control")
 
 #comparison of LD50 allowing different slope and "natural death"
@@ -46,6 +51,11 @@ sex_mod_m<-drm(dead/total~dose,weights=total,
                fct=LN.3u(),
                type="binomial")
 
+
+##############################################################################/
+#Code for plotting the Figure 1####
+##############################################################################/
+
 op<-par(mar=c(5,5,4,1))
 plot(sex_mod_f,type="confidence",col="black",bty="n",axes=FALSE,ann=FALSE,
      lwd=3)
@@ -63,7 +73,7 @@ plot(sex_mod_m,type="obs",add=TRUE,pch=24,cex=2,
      col=rgb(0,0,0,0.3),bg=rgb(0,0,0,0.0))
 title(xlab="Dose (mg/l)",ylab="Mortality rate",cex.lab=2,font.lab=2)
 par(op)
-#export .pdf 10*7 inches
+#export to pdf 10*7 inches
 
 
 ##############################################################################/
