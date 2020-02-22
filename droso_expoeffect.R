@@ -116,7 +116,7 @@ axis(1,at=c(0.001,0.01,0.1,1,10),labels=c("0","0.01","0.1","1","10"),
      lwd=4,font=2,cex.axis=1.5,padj=0.1,xpd=TRUE,las=1)
 axis(2,lwd=4,font=2,cex.axis=1.5,las=1)
 box(bty="l",lwd=4)
-text(0.17*10^-3,1.15,labels=c("B"),cex=4,xpd=TRUE)
+text(0.17*10^-3,1.148,labels=c("B"),cex=4,xpd=TRUE)
 par(op)
 #export to pdf 7 x 7 inches
 
@@ -154,7 +154,7 @@ grid.lines(x=unit(c(0.1,0.5),"npc"),y=unit(c(0.5,0.5),"npc"),
            gp=gpar(lwd=3))
 grid.lines(x=unit(c(0.5,0.5),"npc"),y=unit(c(0.5,0.9),"npc"),
            gp=gpar(lwd=3))
-grid.text("C",x=unit(0.048,"npc"),y=unit(0.94,"npc"),gp=gpar(fontsize=50),
+grid.text("C",x=unit(0.048,"npc"),y=unit(0.955,"npc"),gp=gpar(fontsize=50),
           check=TRUE)
 #export to pdf 7 x 7 inches
 
