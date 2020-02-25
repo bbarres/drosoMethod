@@ -107,10 +107,10 @@ par(op)
 #comparison of the regression curves for the different reading time
 op<-par(mar=c(5.1,5.1,4.1,2.1))
 plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),lwd=1.5,bp=1e-3,
-     legendPos=c(15,0.7),xlab="dose (mg/L)",cex.axis=1.5,cex.lab=2,
+     legendPos=c(15,0.7),xlab="Dose (mg/L)",cex.axis=1.5,cex.lab=2,
      cex=2,axes=FALSE,font.lab=2,font.axis=2,font=2,bty="n")
 arrows(x0=expo_mod0$parmMat[2,1],y0=0.5,
-       x1=expo_mod0$parmMat[2,5],y1=0.5,
+       x1=expo_mod0$parmMat[2,4],y1=0.5,
        length=0.12,angle=25,lwd=3)
 axis(1,at=c(0.001,0.01,0.1,1,10),labels=c("0","0.01","0.1","1","10"),
      lwd=4,font=2,cex.axis=1.5,padj=0.1,xpd=TRUE,las=1)
