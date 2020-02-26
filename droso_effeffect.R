@@ -40,7 +40,7 @@ results<- merge(checkdat,REZdroz,by.x="repet",by.y="date",all=FALSE)
 
 
 ##############################################################################/
-#Figure 5: Scatter plot of the LD50 with different number of fly per dose####
+#Figure 5: Scatter plot of the LD50 with different number of flies per dose####
 ##############################################################################/
 
 legx<-expression(bold("Mean number of ")*bolditalic("D. suzukii ")*
