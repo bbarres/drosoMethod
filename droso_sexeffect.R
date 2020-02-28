@@ -40,8 +40,8 @@ sex_mode<-drm(dead/total~dose,weights=total,
 plot(sex_mode)
 anova(sex_mod,sex_mode)
 
-#because there is a bug to display the 95CI with models using curveid,
-#we plot the different modality separately
+#because it seems that there is a bug to display the 95CI with models 
+#using curveid, we plot the different modality separately
 sex_mod_f<-drm(dead/total~dose,weights=total,
                data=sexdata_f,
                fct=LN.3u(),

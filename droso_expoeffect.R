@@ -63,6 +63,7 @@ anova(expo_mod1b,expo_mod0) #there is a significant effect of the LD50
 
 #comparing the LD50 between the different time of exposure on the full model
 compParm(expo_mod0,"e")
+exporez_f<-ED(expo_mod0,50,interval="delta",reference="control")
 op<-par(mar=c(5.1,5.1,4.1,2.1))
 plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),lwd=1.5,
      legendPos=c(15,0.7),xlab="dose (mg/L)",cex.axis=1.5,cex.lab=2,cex=2)
