@@ -10,9 +10,9 @@ Bioassays are the golden standard for pesticide resistance assessment of pest. D
 
 
 ## Datasets
-There are three datasets used in this study. The files can be found in the ***data*** folder. 
+There are three datasets used in this study. The files can be found in the "data" folder. 
 
-+ **droso_data.txt:** the first dataset contains the general data for all the experiment conducted
+### **droso_data.txt:** the first dataset contains the general data for all the experiment conducted
   + *date*: the date of the experimentation
   + *sex*: the sex of the flies
   + *dose*: the dose of the active substance tested
