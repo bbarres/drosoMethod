@@ -38,7 +38,7 @@ plot(checkdat)
 
 
 ##############################################################################/
-#loading the genetic results data for the radaplot####
+#loading the genetic results data for the radarplot####
 ##############################################################################/
 
 #load the datasets
