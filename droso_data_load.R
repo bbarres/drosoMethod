@@ -20,7 +20,7 @@ library(RColorBrewer)
 ##############################################################################/
 
 #load the dataset
-dataDroz<-read.table("data/droso_data.txt",header=T,sep="\t")
+dataDroz<-read.table("data/droso_datab.txt",header=T,sep="\t")
 # #we remove the two concentrations that were used at the beginning of the 
 # #test when we were still adjusting the range of doses for the test
 # dataDroz<-dataDroz[dataDroz$dose!=603.70 & dataDroz$dose!=301.85,]
