@@ -17,6 +17,9 @@ expodata<-dataDroz[dataDroz$expo_comp==1,]
 #because there is a strong effect of sex and we are mainly interested in the
 #effect on the female, we split the dataset according to sex
 expodata_f<-expodata[expodata$sex=="female",]
+rep0<-expodata_f[expodata_f$date=="13/12/17",]
+rep1<-expodata_f[expodata_f$date=="09/09/20",]
+rep2<-expodata_f[expodata_f$date=="24/09/20",]
 expodata_m<-expodata[expodata$sex=="male",]
 
 #loading the data of an example of evolution of the death rate at the dose 
