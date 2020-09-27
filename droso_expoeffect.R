@@ -79,6 +79,47 @@ par(op)
 
 
 ##############################################################################/
+#Effect of the exposure on the LD50 estimation: female by rep####
+##############################################################################/
+
+#fitting the "null hypothesis model" rep0
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=rep0,
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
+
+#fitting the "null hypothesis model" rep1
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=rep1,
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
+
+#fitting the "null hypothesis model" rep2
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=rep2,
+               fct=LN.2(),
+               type="binomial")
+#no convergence for several time (21h, 22h and 23h)
+#we remove the problematic time
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=rep2[rep2$exposition!="21h"
+                         & rep2$exposition!="22h"
+                         & rep2$exposition!="23h",],
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
+plot(expo_mod0,col=c(1,2,2,1,1,1,1),xlim=c(0,30))
+
+
+##############################################################################/
 #Figure 6: final plots examplifying effect of time of exposure
 ##############################################################################/
 
