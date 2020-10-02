@@ -20,6 +20,8 @@ expodata_f<-expodata[expodata$sex=="female",]
 rep0<-expodata_f[expodata_f$date=="13/12/17",]
 rep1<-expodata_f[expodata_f$date=="09/09/20",]
 rep2<-expodata_f[expodata_f$date=="24/09/20",]
+rep3<-expodata_f[expodata_f$date=="30/09/20",]
+rep4<-expodata_f[expodata_f$date=="04/10/20",]
 expodata_m<-expodata[expodata$sex=="male",]
 
 #loading the data of an example of evolution of the death rate at the dose 
@@ -117,6 +119,24 @@ expo_mod0<-drm(dead/total~dose,exposition,
                type="binomial")
 summary(expo_mod0)
 plot(expo_mod0,col=c(1,2,2,1,1,1,1),xlim=c(0,30))
+
+#fitting the "null hypothesis model" rep3
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=rep3,
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
+
+#fitting the "null hypothesis model" rep4
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=rep4,
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
 
 
 ##############################################################################/
