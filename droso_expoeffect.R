@@ -230,5 +230,72 @@ grid.text("C",x=unit(0.048,"npc"),y=unit(0.955,"npc"),gp=gpar(fontsize=50),
 
 
 ##############################################################################/
+#Effect of the exposure on the LD50 estimation: female moribund=alive####
+##############################################################################/
+
+#load the dataset
+dataDrozbis<-read.table("data/droso_datad_DD.txt",header=T,sep="\t")
+# #we remove the two concentrations that were used at the beginning of the 
+# #test when we were still adjusting the range of doses for the test
+# dataDroz<-dataDroz[dataDroz$dose!=603.70 & dataDroz$dose!=301.85,]
+#creation of variable to distinguish between male and female and time 
+#of exposure to pesticide
+dataDrozbis<-cbind(dataDrozbis,
+                   "repet"=paste(dataDrozbis$date,dataDrozbis$sex,
+                                 dataDrozbis$exposition))
+#we select the data of lambda-cyhalothrin test with the St Foy population
+expodatabis<-dataDrozbis[dataDrozbis$expo_comp==1,]
+
+#because there is a strong effect of sex and we are mainly interested in the
+#effect on the female, we split the dataset according to sex
+expodatabis_f<-expodatabis[expodatabis$sex=="female",]
+rep0bis<-expodatabis_f[expodatabis_f$date=="13/12/17",]
+rep1bis<-expodatabis_f[expodatabis_f$date=="09/09/20",]
+rep2bis<-expodatabis_f[expodatabis_f$date=="24/09/20",]
+rep3bis<-expodatabis_f[expodatabis_f$date=="30/09/20",]
+rep4bis<-expodatabis_f[expodatabis_f$date=="01/10/20",]
+
+#fitting the "null hypothesis model" rep1
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=rep1bis,
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
+     main="rep1 - 09/09/20 - dead")
+
+#fitting the "null hypothesis model" rep2
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=rep2bis,
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
+     main="rep2 - 24/09/20 - dead")
+
+#fitting the "null hypothesis model" rep3
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=rep3bis,
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
+     main="rep3 - 30/09/20 - dead")
+
+#fitting the "null hypothesis model" rep4
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=rep4bis,
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
+     main="rep4 - 01/10/20 - dead")
+
+
+##############################################################################/
 #END
 ##############################################################################/
