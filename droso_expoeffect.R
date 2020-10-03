@@ -21,7 +21,7 @@ rep0<-expodata_f[expodata_f$date=="13/12/17",]
 rep1<-expodata_f[expodata_f$date=="09/09/20",]
 rep2<-expodata_f[expodata_f$date=="24/09/20",]
 rep3<-expodata_f[expodata_f$date=="30/09/20",]
-rep4<-expodata_f[expodata_f$date=="04/10/20",]
+rep4<-expodata_f[expodata_f$date=="01/10/20",]
 expodata_m<-expodata[expodata$sex=="male",]
 
 #loading the data of an example of evolution of the death rate at the dose 
@@ -91,7 +91,8 @@ expo_mod0<-drm(dead/total~dose,exposition,
                fct=LN.2(),
                type="binomial")
 summary(expo_mod0)
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
+     main="rep0 - 13/12/17 - alive")
 
 #fitting the "null hypothesis model" rep1
 expo_mod0<-drm(dead/total~dose,exposition,
@@ -100,7 +101,8 @@ expo_mod0<-drm(dead/total~dose,exposition,
                fct=LN.2(),
                type="binomial")
 summary(expo_mod0)
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
+     main="rep1 - 09/09/20 - alive")
 
 #fitting the "null hypothesis model" rep2
 expo_mod0<-drm(dead/total~dose,exposition,
@@ -118,7 +120,8 @@ expo_mod0<-drm(dead/total~dose,exposition,
                fct=LN.2(),
                type="binomial")
 summary(expo_mod0)
-plot(expo_mod0,col=c(1,2,2,1,1,1,1),xlim=c(0,30))
+plot(expo_mod0,col=c(1,2,2,1,1,1,1),xlim=c(0,30),
+     main="rep2 - 24/09/20 - alive")
 
 #fitting the "null hypothesis model" rep3
 expo_mod0<-drm(dead/total~dose,exposition,
@@ -127,7 +130,8 @@ expo_mod0<-drm(dead/total~dose,exposition,
                fct=LN.2(),
                type="binomial")
 summary(expo_mod0)
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
+     main="rep3 - 30/09/20 - alive")
 
 #fitting the "null hypothesis model" rep4
 expo_mod0<-drm(dead/total~dose,exposition,
@@ -136,7 +140,8 @@ expo_mod0<-drm(dead/total~dose,exposition,
                fct=LN.2(),
                type="binomial")
 summary(expo_mod0)
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
+     main="rep4 - 01/10/20 - alive")
 
 
 ##############################################################################/
