@@ -263,6 +263,7 @@ expo_mod0<-drm(dead/total~dose,exposition,
                type="binomial")
 summary(expo_mod0)
 plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
+     xt=c(0.01,0.1,1,10,100),legendPos=c(200,0.5),
      main="rep1 - 09/09/20 - dead")
 
 #fitting the "null hypothesis model" rep2
@@ -273,6 +274,7 @@ expo_mod0<-drm(dead/total~dose,exposition,
                type="binomial")
 summary(expo_mod0)
 plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
+     xt=c(0.01,0.1,1,10,100),legendPos=c(200,0.5),
      main="rep2 - 24/09/20 - dead")
 
 #fitting the "null hypothesis model" rep3
@@ -283,6 +285,7 @@ expo_mod0<-drm(dead/total~dose,exposition,
                type="binomial")
 summary(expo_mod0)
 plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),ylim=c(0,1),
+     xt=c(0.001,0.01,0.1,1,10,100),legendPos=c(0.1,1),
      main="rep3 - 30/09/20 - dead")
 
 #fitting the "null hypothesis model" rep4
@@ -293,6 +296,7 @@ expo_mod0<-drm(dead/total~dose,exposition,
                type="binomial")
 summary(expo_mod0)
 plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
+     xt=c(0.001,0.01,0.1,1,10,100),legendPos=c(0.1,1),
      main="rep4 - 01/10/20 - dead")
 
 
