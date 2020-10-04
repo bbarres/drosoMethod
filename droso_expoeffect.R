@@ -282,7 +282,7 @@ expo_mod0<-drm(dead/total~dose,exposition,
                fct=LN.2(),
                type="binomial")
 summary(expo_mod0)
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),ylim=c(0,1),
      main="rep3 - 30/09/20 - dead")
 
 #fitting the "null hypothesis model" rep4
