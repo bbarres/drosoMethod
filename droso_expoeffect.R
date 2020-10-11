@@ -22,6 +22,8 @@ rep1<-expodata_f[expodata_f$date=="09/09/20",]
 rep2<-expodata_f[expodata_f$date=="24/09/20",]
 rep3<-expodata_f[expodata_f$date=="30/09/20",]
 rep4<-expodata_f[expodata_f$date=="01/10/20",]
+rep5<-expodata_f[expodata_f$date=="07/10/20",]
+rep6<-expodata_f[expodata_f$date=="08/10/20",]
 expodata_m<-expodata[expodata$sex=="male",]
 
 #loading the data of an example of evolution of the death rate at the dose 
@@ -143,9 +145,29 @@ summary(expo_mod0)
 plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
      main="rep4 - 01/10/20 - alive")
 
+#fitting the "null hypothesis model" rep5
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=rep5,
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
+     main="rep5 - 07/10/20 - alive")
+
+#fitting the "null hypothesis model" rep4
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=rep6,
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
+     main="rep6 - 08/10/20 - alive")
+
 
 ##############################################################################/
-#Figure 6: final plots examplifying effect of time of exposure
+#Figure 6: final plots exemplifying effect of time of exposure
 ##############################################################################/
 
 #plot of the raw results for the female at dose 0.25 mg/L
@@ -254,6 +276,8 @@ rep1bis<-expodatabis_f[expodatabis_f$date=="09/09/20",]
 rep2bis<-expodatabis_f[expodatabis_f$date=="24/09/20",]
 rep3bis<-expodatabis_f[expodatabis_f$date=="30/09/20",]
 rep4bis<-expodatabis_f[expodatabis_f$date=="01/10/20",]
+rep5bis<-expodatabis_f[expodatabis_f$date=="07/10/20",]
+rep6bis<-expodatabis_f[expodatabis_f$date=="08/10/20",]
 
 #fitting the "null hypothesis model" rep1
 expo_mod0<-drm(dead/total~dose,exposition,
@@ -298,6 +322,28 @@ summary(expo_mod0)
 plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
      xt=c(0.001,0.01,0.1,1,10,100),legendPos=c(0.1,1),
      main="rep4 - 01/10/20 - dead")
+
+#fitting the "null hypothesis model" rep4
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=rep5bis,
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
+     xt=c(0.001,0.01,0.1,1,10,100),legendPos=c(0.1,1),
+     main="rep5 - 07/10/20 - dead")
+
+#fitting the "null hypothesis model" rep4
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=rep6bis,
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
+     xt=c(0.001,0.01,0.1,1,10,100),legendPos=c(0.1,1),
+     main="rep6 - 08/10/20 - dead")
 
 
 ##############################################################################/
