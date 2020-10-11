@@ -155,7 +155,7 @@ summary(expo_mod0)
 plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
      main="rep5 - 07/10/20 - alive")
 
-#fitting the "null hypothesis model" rep4
+#fitting the "null hypothesis model" rep6
 expo_mod0<-drm(dead/total~dose,exposition,
                weights=total,
                data=rep6,
@@ -257,11 +257,6 @@ grid.text("C",x=unit(0.048,"npc"),y=unit(0.955,"npc"),gp=gpar(fontsize=50),
 
 #load the dataset
 dataDrozbis<-read.table("data/droso_datad_DD.txt",header=T,sep="\t")
-# #we remove the two concentrations that were used at the beginning of the 
-# #test when we were still adjusting the range of doses for the test
-# dataDroz<-dataDroz[dataDroz$dose!=603.70 & dataDroz$dose!=301.85,]
-#creation of variable to distinguish between male and female and time 
-#of exposure to pesticide
 dataDrozbis<-cbind(dataDrozbis,
                    "repet"=paste(dataDrozbis$date,dataDrozbis$sex,
                                  dataDrozbis$exposition))
@@ -271,7 +266,6 @@ expodatabis<-dataDrozbis[dataDrozbis$expo_comp==1,]
 #because there is a strong effect of sex and we are mainly interested in the
 #effect on the female, we split the dataset according to sex
 expodatabis_f<-expodatabis[expodatabis$sex=="female",]
-rep0bis<-expodatabis_f[expodatabis_f$date=="13/12/17",]
 rep1bis<-expodatabis_f[expodatabis_f$date=="09/09/20",]
 rep2bis<-expodatabis_f[expodatabis_f$date=="24/09/20",]
 rep3bis<-expodatabis_f[expodatabis_f$date=="30/09/20",]
@@ -323,7 +317,7 @@ plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
      xt=c(0.001,0.01,0.1,1,10,100),legendPos=c(0.1,1),
      main="rep4 - 01/10/20 - dead")
 
-#fitting the "null hypothesis model" rep4
+#fitting the "null hypothesis model" rep5
 expo_mod0<-drm(dead/total~dose,exposition,
                weights=total,
                data=rep5bis,
@@ -334,7 +328,7 @@ plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
      xt=c(0.001,0.01,0.1,1,10,100),legendPos=c(0.1,1),
      main="rep5 - 07/10/20 - dead")
 
-#fitting the "null hypothesis model" rep4
+#fitting the "null hypothesis model" rep6
 expo_mod0<-drm(dead/total~dose,exposition,
                weights=total,
                data=rep6bis,
@@ -344,6 +338,47 @@ summary(expo_mod0)
 plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
      xt=c(0.001,0.01,0.1,1,10,100),legendPos=c(0.1,1),
      main="rep6 - 08/10/20 - dead")
+
+
+##############################################################################/
+#Effect of the exposure on the LD50 estimation: female alive-moribund=dead####
+##############################################################################/
+
+#load the dataset
+dataDrozter<-read.table("data/droso_datad_AMD.txt",header=T,sep="\t")
+dataDrozter<-cbind(dataDrozter,
+                   "repet"=paste(dataDrozter$date,dataDrozter$sex,
+                                 dataDrozter$exposition))
+#we select the data of lambda-cyhalothrin test with the St Foy population
+expodatater<-dataDrozter[dataDrozter$expo_comp==1,]
+
+#because there is a strong effect of sex and we are mainly interested in the
+#effect on the female, we split the dataset according to sex
+expodatater_f<-expodatater[expodatater$sex=="female",]
+rep5ter<-expodatater_f[expodatater_f$date=="07/10/20",]
+rep6ter<-expodatater_f[expodatater_f$date=="08/10/20",]
+
+#fitting the "null hypothesis model" rep4
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=rep5ter,
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
+     xt=c(0.001,0.01,0.1,1,10,100),legendPos=c(0.1,1),
+     main="rep5 - 07/10/20 - 2moribund")
+
+#fitting the "null hypothesis model" rep4
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=rep6ter,
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
+     xt=c(0.001,0.01,0.1,1,10,100),legendPos=c(0.1,1),
+     main="rep6 - 08/10/20 - 2moribund")
 
 
 ##############################################################################/
