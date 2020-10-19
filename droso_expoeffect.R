@@ -13,17 +13,27 @@ source("droso_data_load.R")
 
 #we select the data of lambda-cyhalothrin test with the St Foy population
 expodata<-dataDroz[dataDroz$expo_comp==1,]
+expodata$exposition<-factor(expodata$exposition,
+                            levels=c("1h","2h","3h","4h","5h",
+                                     "20h","21h","22h","23h","24h"))
 
 #because there is a strong effect of sex and we are mainly interested in the
 #effect on the female, we split the dataset according to sex
 expodata_f<-expodata[expodata$sex=="female",]
-rep0<-expodata_f[expodata_f$date=="13/12/17",]
 rep1<-expodata_f[expodata_f$date=="09/09/20",]
-rep2<-expodata_f[expodata_f$date=="24/09/20",]
-rep3<-expodata_f[expodata_f$date=="30/09/20",]
-rep4<-expodata_f[expodata_f$date=="01/10/20",]
-rep5<-expodata_f[expodata_f$date=="07/10/20",]
-rep6<-expodata_f[expodata_f$date=="08/10/20",]
+rep2<-expodata_f[expodata_f$date=="30/09/20",]
+rep3<-expodata_f[expodata_f$date=="01/10/20",]
+expo1<-expodata_f[expodata_f$exposition=="1h",]
+expo2<-expodata_f[expodata_f$exposition=="2h",]
+expo3<-expodata_f[expodata_f$exposition=="3h",]
+expo4<-expodata_f[expodata_f$exposition=="4h",]
+expo5<-expodata_f[expodata_f$exposition=="5h",]
+expo20<-expodata_f[expodata_f$exposition=="20h",]
+expo21<-expodata_f[expodata_f$exposition=="21h",]
+expo22<-expodata_f[expodata_f$exposition=="22h",]
+expo23<-expodata_f[expodata_f$exposition=="23h",]
+expo24<-expodata_f[expodata_f$exposition=="24h",]
+
 expodata_m<-expodata[expodata$sex=="male",]
 
 #loading the data of an example of evolution of the death rate at the dose 
@@ -31,6 +41,100 @@ expodata_m<-expodata[expodata$sex=="male",]
 data_expo<-read.table("data/droso_expo.txt",header=TRUE,sep="\t")
 data_expo<-t(data_expo[,c(6:3,1)])
 colnames(data_expo)<-data_expo[5,]
+
+
+##############################################################################/
+#Model with repetition as random effect####
+##############################################################################/
+
+metaexpo<-metadrm(dead/total~dose,
+                  data=expodata_f,
+                  fct=LN.2(),
+                  ind=repet,
+                  cid2=exposition,
+                  struct="UN")
+summary(metaexpo)
+
+EDcomp(metaexpo,
+       percVec=50,
+       percMat=rbind(c(1,1)),
+       interval="delta")
+compParm(metaexpo,"e")
+
+
+##############################################################################/
+#testing the difference between repetition for the different exposure time####
+##############################################################################/
+
+expo_mod1<-drm(dead/total~dose,date,
+               weights=total,
+               data=expo1,
+               fct=LN.2(),
+               type="binomial")
+compParm(expo_mod1,"e")
+
+expo_mod2<-drm(dead/total~dose,date,
+               weights=total,
+               data=expo2,
+               fct=LN.2(),
+               type="binomial")
+compParm(expo_mod2,"e")
+
+expo_mod3<-drm(dead/total~dose,date,
+               weights=total,
+               data=expo3,
+               fct=LN.2(),
+               type="binomial")
+compParm(expo_mod3,"e")
+
+expo_mod4<-drm(dead/total~dose,date,
+               weights=total,
+               data=expo4,
+               fct=LN.2(),
+               type="binomial")
+compParm(expo_mod4,"e")
+
+expo_mod5<-drm(dead/total~dose,date,
+               weights=total,
+               data=expo5,
+               fct=LN.2(),
+               type="binomial")
+compParm(expo_mod5,"e")
+
+expo_mod20<-drm(dead/total~dose,date,
+               weights=total,
+               data=expo20,
+               fct=LN.2(),
+               type="binomial")
+compParm(expo_mod20,"e")
+
+expo_mod21<-drm(dead/total~dose,date,
+               weights=total,
+               data=expo21,
+               fct=LN.2(),
+               type="binomial")
+compParm(expo_mod21,"e")
+
+expo_mod22<-drm(dead/total~dose,date,
+               weights=total,
+               data=expo22,
+               fct=LN.2(),
+               type="binomial")
+compParm(expo_mod22,"e")
+
+expo_mod23<-drm(dead/total~dose,date,
+                weights=total,
+                data=expo23,
+                fct=LN.2(),
+                type="binomial")
+compParm(expo_mod23,"e")
+
+expo_mod24<-drm(dead/total~dose,date,
+                weights=total,
+                data=expo24,
+                fct=LN.2(),
+                type="binomial")
+compParm(expo_mod24,"e")
 
 
 ##############################################################################/
@@ -55,7 +159,7 @@ expo_mod1e<-drm(dead/total~dose,exposition,
                 pmodels=list(~1, ~exposition-1))
 summary(expo_mod1e)
 plot(expo_mod1e,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
-anova(expo_mod1e,expo_mod0) #there is a significant effect of the slope
+anova(expo_mod1e,expo_mod0) #there is no significant effect of the slope
 
 #testing for equality of LD50
 expo_mod1b<-drm(dead/total~dose,exposition,
@@ -86,16 +190,6 @@ par(op)
 #Effect of the exposure on the LD50 estimation: female by rep####
 ##############################################################################/
 
-#fitting the "null hypothesis model" rep0
-expo_mod0<-drm(dead/total~dose,exposition,
-               weights=total,
-               data=rep0,
-               fct=LN.2(),
-               type="binomial")
-summary(expo_mod0)
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
-     main="rep0 - 13/12/17 - alive")
-
 #fitting the "null hypothesis model" rep1
 expo_mod0<-drm(dead/total~dose,exposition,
                weights=total,
@@ -112,18 +206,9 @@ expo_mod0<-drm(dead/total~dose,exposition,
                data=rep2,
                fct=LN.2(),
                type="binomial")
-#no convergence for several time (21h, 22h and 23h)
-#we remove the problematic time
-expo_mod0<-drm(dead/total~dose,exposition,
-               weights=total,
-               data=rep2[rep2$exposition!="21h"
-                         & rep2$exposition!="22h"
-                         & rep2$exposition!="23h",],
-               fct=LN.2(),
-               type="binomial")
 summary(expo_mod0)
-plot(expo_mod0,col=c(1,2,2,1,1,1,1),xlim=c(0,30),
-     main="rep2 - 24/09/20 - alive")
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
+     main="rep2 - 30/09/20 - alive")
 
 #fitting the "null hypothesis model" rep3
 expo_mod0<-drm(dead/total~dose,exposition,
@@ -133,37 +218,7 @@ expo_mod0<-drm(dead/total~dose,exposition,
                type="binomial")
 summary(expo_mod0)
 plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
-     main="rep3 - 30/09/20 - alive")
-
-#fitting the "null hypothesis model" rep4
-expo_mod0<-drm(dead/total~dose,exposition,
-               weights=total,
-               data=rep4,
-               fct=LN.2(),
-               type="binomial")
-summary(expo_mod0)
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
-     main="rep4 - 01/10/20 - alive")
-
-#fitting the "null hypothesis model" rep5
-expo_mod0<-drm(dead/total~dose,exposition,
-               weights=total,
-               data=rep5,
-               fct=LN.2(),
-               type="binomial")
-summary(expo_mod0)
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
-     main="rep5 - 07/10/20 - alive")
-
-#fitting the "null hypothesis model" rep6
-expo_mod0<-drm(dead/total~dose,exposition,
-               weights=total,
-               data=rep6,
-               fct=LN.2(),
-               type="binomial")
-summary(expo_mod0)
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
-     main="rep6 - 08/10/20 - alive")
+     main="rep3 - 01/10/20 - alive")
 
 
 ##############################################################################/
