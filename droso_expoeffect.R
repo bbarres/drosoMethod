@@ -44,9 +44,11 @@ colnames(data_expo)<-data_expo[5,]
 
 
 ##############################################################################/
-#Model with repetition as random effect####
+#General model to test if there is differences linked with time of exposure####
 ##############################################################################/
 
+#model with replicates as random factor and time of exposure as grouping 
+#factor
 metaexpo<-metadrm(dead/total~dose,
                   data=expodata_f,
                   fct=LN.2(),
@@ -59,82 +61,85 @@ EDcomp(metaexpo,
        percVec=50,
        percMat=rbind(c(1,1)),
        interval="delta")
-compParm(metaexpo,"e")
+compParm(metaexpo,"e") 
+#some comparisons of LD50 are significantly different
 
 
 ##############################################################################/
-#testing the difference between repetition for the different exposure time####
+#testing the difference between replicates for the different exposure times####
 ##############################################################################/
 
+#because we are performing 30 tests, we apply the bonferonni correction to 
+#the p-value leading to a corrected p-value of 0.0016 (=0.05/30)
 expo_mod1<-drm(dead/total~dose,date,
                weights=total,
                data=expo1,
                fct=LN.2(),
                type="binomial")
-compParm(expo_mod1,"e")
+compParm(expo_mod1,"e") #0 significant
 
 expo_mod2<-drm(dead/total~dose,date,
                weights=total,
                data=expo2,
                fct=LN.2(),
                type="binomial")
-compParm(expo_mod2,"e")
+compParm(expo_mod2,"e") #1 significant
 
 expo_mod3<-drm(dead/total~dose,date,
                weights=total,
                data=expo3,
                fct=LN.2(),
                type="binomial")
-compParm(expo_mod3,"e")
+compParm(expo_mod3,"e") #1 significant
 
 expo_mod4<-drm(dead/total~dose,date,
                weights=total,
                data=expo4,
                fct=LN.2(),
                type="binomial")
-compParm(expo_mod4,"e")
+compParm(expo_mod4,"e") #0 significant
 
 expo_mod5<-drm(dead/total~dose,date,
                weights=total,
                data=expo5,
                fct=LN.2(),
                type="binomial")
-compParm(expo_mod5,"e")
+compParm(expo_mod5,"e") #0 significant
 
 expo_mod20<-drm(dead/total~dose,date,
                weights=total,
                data=expo20,
                fct=LN.2(),
                type="binomial")
-compParm(expo_mod20,"e")
+compParm(expo_mod20,"e") #0 significant
 
 expo_mod21<-drm(dead/total~dose,date,
                weights=total,
                data=expo21,
                fct=LN.2(),
                type="binomial")
-compParm(expo_mod21,"e")
+compParm(expo_mod21,"e") #0 significant
 
 expo_mod22<-drm(dead/total~dose,date,
                weights=total,
                data=expo22,
                fct=LN.2(),
                type="binomial")
-compParm(expo_mod22,"e")
+compParm(expo_mod22,"e") #0 significant
 
 expo_mod23<-drm(dead/total~dose,date,
                 weights=total,
                 data=expo23,
                 fct=LN.2(),
                 type="binomial")
-compParm(expo_mod23,"e")
+compParm(expo_mod23,"e") #0 significant
 
 expo_mod24<-drm(dead/total~dose,date,
                 weights=total,
                 data=expo24,
                 fct=LN.2(),
                 type="binomial")
-compParm(expo_mod24,"e")
+compParm(expo_mod24,"e") #0 significant
 
 
 ##############################################################################/
@@ -237,9 +242,9 @@ summary(expo_mod0)
 
 #comparison of the regression curves for the different reading time
 op<-par(mar=c(5.1,5.1,4.1,2.1))
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),lwd=1.5,bp=1e-3,
-     legendPos=c(30,0.7),xlab="Dose (mg/l)",cex.axis=1.5,cex.lab=2,
-     cex=2,axes=FALSE,font.lab=2,font.axis=2,font=2,bty="n")
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,100),lwd=1.5,bp=1e-3,
+     legendPos=c(200,0.85),xlab="Dose (mg/l)",cex.axis=1.5,cex.lab=2,
+     cex=2,axes=FALSE,font.lab=2,font.axis=2,font=2,bty="n",cex.legend=1.7)
 arrows(x0=expo_mod0$parmMat[2,1],y0=0.5,
        x1=expo_mod0$parmMat[2,5],y1=0.5,
        length=0.12,angle=25,lwd=3)
