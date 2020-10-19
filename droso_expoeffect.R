@@ -190,6 +190,7 @@ par(op)
 #Effect of the exposure on the LD50 estimation: female by rep####
 ##############################################################################/
 
+op<-par(mfrow=c(3,1))
 #fitting the "null hypothesis model" rep1
 expo_mod0<-drm(dead/total~dose,exposition,
                weights=total,
@@ -198,7 +199,7 @@ expo_mod0<-drm(dead/total~dose,exposition,
                type="binomial")
 summary(expo_mod0)
 plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
-     main="rep1 - 09/09/20 - alive")
+     main="rep1 - 09/09/20",bp=0.001)
 
 #fitting the "null hypothesis model" rep2
 expo_mod0<-drm(dead/total~dose,exposition,
@@ -208,7 +209,7 @@ expo_mod0<-drm(dead/total~dose,exposition,
                type="binomial")
 summary(expo_mod0)
 plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
-     main="rep2 - 30/09/20 - alive")
+     main="rep2 - 30/09/20")
 
 #fitting the "null hypothesis model" rep3
 expo_mod0<-drm(dead/total~dose,exposition,
@@ -218,54 +219,37 @@ expo_mod0<-drm(dead/total~dose,exposition,
                type="binomial")
 summary(expo_mod0)
 plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
-     main="rep3 - 01/10/20 - alive")
+     main="rep3 - 01/10/20")
+par(op)
 
 
 ##############################################################################/
 #Figure 6: final plots exemplifying effect of time of exposure
 ##############################################################################/
 
-#plot of the raw results for the female at dose 0.25 mg/L
-op<-par(mar=c(5.1,5.1,4.1,2.1))
-expobarplot<-barplot(data_expo[,c(12:22)],col=c("black","grey60","grey85"),
-                     border=NA,axes=FALSE,axisnames=FALSE,space=0.2,
-                     xpd=FALSE)
-axis(1,at=expobarplot,labels=FALSE,lwd=4,font=2,
-     cex.axis=1.5,padj=0.1,xpd=TRUE,las=1)
-text(expobarplot,par("usr")[1]-1.3,labels=colnames(data_expo),srt=0,
-     xpd=TRUE,cex=1.4,font=2)
-axis(2,lwd=4,font=2,cex.axis=1.5,las=1)
-box(bty="l",lwd=4)
-title(main="dose = 0.25 mg/L",xlab=NULL,ylab="Number of flies",cex.lab=2,
-      line=2.5,font.lab=2,cex.main=1.5)
-text(expobarplot-0.03,as.numeric(data_expo[1,c(12:22)])/2,
-     data_expo[1,c(12:22)],font=2,cex=2,xpd=TRUE,col="white")
-text(expobarplot-0.03,as.numeric(data_expo[1,c(12:22)]) + 
-        as.numeric(data_expo[2,c(12:22)])/2,
-     data_expo[2,c(12:22)],font=2,cex=2,xpd=TRUE,col="black")
-text(expobarplot-0.03,as.numeric(data_expo[1,c(12:22)]) + 
-        as.numeric(data_expo[2,c(12:22)]) + 
-        as.numeric(data_expo[3,c(12:22)])/2,
-     data_expo[3,c(12:22)],font=2,cex=2,xpd=TRUE,col="black")
-text(-2,27.5,labels=c("A"),cex=4,xpd=TRUE)
-par(op)
-#export to pdf 7 x 7 inches
+#fitting the "null hypothesis model"
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=expodata_f,
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
 
 #comparison of the regression curves for the different reading time
 op<-par(mar=c(5.1,5.1,4.1,2.1))
 plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),lwd=1.5,bp=1e-3,
-     legendPos=c(15,0.7),xlab="Dose (mg/L)",cex.axis=1.5,cex.lab=2,
+     legendPos=c(30,0.7),xlab="Dose (mg/l)",cex.axis=1.5,cex.lab=2,
      cex=2,axes=FALSE,font.lab=2,font.axis=2,font=2,bty="n")
 arrows(x0=expo_mod0$parmMat[2,1],y0=0.5,
-       x1=expo_mod0$parmMat[2,4],y1=0.5,
+       x1=expo_mod0$parmMat[2,5],y1=0.5,
        length=0.12,angle=25,lwd=3)
 axis(1,at=c(0.001,0.01,0.1,1,10),labels=c("0","0.01","0.1","1","10"),
      lwd=4,font=2,cex.axis=1.5,padj=0.1,xpd=TRUE,las=1)
 axis(2,lwd=4,font=2,cex.axis=1.5,las=1)
 box(bty="l",lwd=4)
-text(0.17*10^-3,1.148,labels=c("B"),cex=4,xpd=TRUE)
+text(0.19*10^-3,1.148,labels=c("A"),cex=4,xpd=TRUE)
 par(op)
-#export to pdf 7 x 7 inches
+#export to pdf 7 x 8 inches
 
 #heatmap displaying the level of significance of the different LD50 at 
 #different reading time
@@ -293,147 +277,17 @@ chaudemap<-LDheatmap(temp,title=NULL,
                      color=c(rep(grey(0.8),3),
                              brewer.pal(6,"YlOrRd")[c(2,4,6)]),
                      name="CHR",flip=FALSE,add.key=FALSE)
-grid.edit(gPath("CHR","heatMap","heatmap"),gp=gpar(col="white",lwd=1))
+grid.edit(gPath("CHR","heatMap","heatmap"),gp=gpar(col="white",lwd=2.5))
 grid.edit(gPath("CHR","SNPnames"),
-          gp=gpar(col="black",rot="0",cex=0.9,font=2),
+          gp=gpar(col="black",rot="0",cex=1.5,font=2),
           rot=0,hjust=0.6)
 grid.lines(x=unit(c(0.1,0.5),"npc"),y=unit(c(0.5,0.5),"npc"),
-           gp=gpar(lwd=3))
+           gp=gpar(lwd=5))
 grid.lines(x=unit(c(0.5,0.5),"npc"),y=unit(c(0.5,0.9),"npc"),
-           gp=gpar(lwd=3))
-grid.text("C",x=unit(0.048,"npc"),y=unit(0.955,"npc"),gp=gpar(fontsize=50),
+           gp=gpar(lwd=5))
+grid.text("B",x=unit(0.048,"npc"),y=unit(0.955,"npc"),gp=gpar(fontsize=50),
           check=TRUE)
 #export to pdf 7 x 7 inches
-
-
-##############################################################################/
-#Effect of the exposure on the LD50 estimation: female moribund=alive####
-##############################################################################/
-
-#load the dataset
-dataDrozbis<-read.table("data/droso_datad_DD.txt",header=T,sep="\t")
-dataDrozbis<-cbind(dataDrozbis,
-                   "repet"=paste(dataDrozbis$date,dataDrozbis$sex,
-                                 dataDrozbis$exposition))
-#we select the data of lambda-cyhalothrin test with the St Foy population
-expodatabis<-dataDrozbis[dataDrozbis$expo_comp==1,]
-
-#because there is a strong effect of sex and we are mainly interested in the
-#effect on the female, we split the dataset according to sex
-expodatabis_f<-expodatabis[expodatabis$sex=="female",]
-rep1bis<-expodatabis_f[expodatabis_f$date=="09/09/20",]
-rep2bis<-expodatabis_f[expodatabis_f$date=="24/09/20",]
-rep3bis<-expodatabis_f[expodatabis_f$date=="30/09/20",]
-rep4bis<-expodatabis_f[expodatabis_f$date=="01/10/20",]
-rep5bis<-expodatabis_f[expodatabis_f$date=="07/10/20",]
-rep6bis<-expodatabis_f[expodatabis_f$date=="08/10/20",]
-
-#fitting the "null hypothesis model" rep1
-expo_mod0<-drm(dead/total~dose,exposition,
-               weights=total,
-               data=rep1bis,
-               fct=LN.2(),
-               type="binomial")
-summary(expo_mod0)
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
-     xt=c(0.01,0.1,1,10,100),legendPos=c(200,0.5),
-     main="rep1 - 09/09/20 - dead")
-
-#fitting the "null hypothesis model" rep2
-expo_mod0<-drm(dead/total~dose,exposition,
-               weights=total,
-               data=rep2bis,
-               fct=LN.2(),
-               type="binomial")
-summary(expo_mod0)
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
-     xt=c(0.01,0.1,1,10,100),legendPos=c(200,0.5),
-     main="rep2 - 24/09/20 - dead")
-
-#fitting the "null hypothesis model" rep3
-expo_mod0<-drm(dead/total~dose,exposition,
-               weights=total,
-               data=rep3bis,
-               fct=LN.2(),
-               type="binomial")
-summary(expo_mod0)
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),ylim=c(0,1),
-     xt=c(0.001,0.01,0.1,1,10,100),legendPos=c(0.1,1),
-     main="rep3 - 30/09/20 - dead")
-
-#fitting the "null hypothesis model" rep4
-expo_mod0<-drm(dead/total~dose,exposition,
-               weights=total,
-               data=rep4bis,
-               fct=LN.2(),
-               type="binomial")
-summary(expo_mod0)
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
-     xt=c(0.001,0.01,0.1,1,10,100),legendPos=c(0.1,1),
-     main="rep4 - 01/10/20 - dead")
-
-#fitting the "null hypothesis model" rep5
-expo_mod0<-drm(dead/total~dose,exposition,
-               weights=total,
-               data=rep5bis,
-               fct=LN.2(),
-               type="binomial")
-summary(expo_mod0)
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
-     xt=c(0.001,0.01,0.1,1,10,100),legendPos=c(0.1,1),
-     main="rep5 - 07/10/20 - dead")
-
-#fitting the "null hypothesis model" rep6
-expo_mod0<-drm(dead/total~dose,exposition,
-               weights=total,
-               data=rep6bis,
-               fct=LN.2(),
-               type="binomial")
-summary(expo_mod0)
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
-     xt=c(0.001,0.01,0.1,1,10,100),legendPos=c(0.1,1),
-     main="rep6 - 08/10/20 - dead")
-
-
-##############################################################################/
-#Effect of the exposure on the LD50 estimation: female alive-moribund=dead####
-##############################################################################/
-
-#load the dataset
-dataDrozter<-read.table("data/droso_datad_AMD.txt",header=T,sep="\t")
-dataDrozter<-cbind(dataDrozter,
-                   "repet"=paste(dataDrozter$date,dataDrozter$sex,
-                                 dataDrozter$exposition))
-#we select the data of lambda-cyhalothrin test with the St Foy population
-expodatater<-dataDrozter[dataDrozter$expo_comp==1,]
-
-#because there is a strong effect of sex and we are mainly interested in the
-#effect on the female, we split the dataset according to sex
-expodatater_f<-expodatater[expodatater$sex=="female",]
-rep5ter<-expodatater_f[expodatater_f$date=="07/10/20",]
-rep6ter<-expodatater_f[expodatater_f$date=="08/10/20",]
-
-#fitting the "null hypothesis model" rep4
-expo_mod0<-drm(dead/total~dose,exposition,
-               weights=total,
-               data=rep5ter,
-               fct=LN.2(),
-               type="binomial")
-summary(expo_mod0)
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
-     xt=c(0.001,0.01,0.1,1,10,100),legendPos=c(0.1,1),
-     main="rep5 - 07/10/20 - 2moribund")
-
-#fitting the "null hypothesis model" rep4
-expo_mod0<-drm(dead/total~dose,exposition,
-               weights=total,
-               data=rep6ter,
-               fct=LN.2(),
-               type="binomial")
-summary(expo_mod0)
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,500),
-     xt=c(0.001,0.01,0.1,1,10,100),legendPos=c(0.1,1),
-     main="rep6 - 08/10/20 - 2moribund")
 
 
 ##############################################################################/
