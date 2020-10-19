@@ -6,6 +6,7 @@
 
 #loading the packages necessary for the analysis
 library(drc)
+library(medrc)
 library(plotrix)
 library(gdata)
 library(fmsb)
