@@ -32,7 +32,7 @@ compParm(age_mod_f,"e")
 agerez_f<-ED(age_mod_f,50,interval="delta",reference="control")
 
 #because it seems there is a problem to display the 95CI with models using 
-#the curveid parameter, #we plot the different modality separately
+#the 'curveid' parameter, we plot the different modalities separately
 age_mod_f24<-drm(dead/total~dose,weights=total,
                  data=agedata_f[agedata_f$age=="0-24h",],
                  fct=LN.3u(),
@@ -68,7 +68,7 @@ plot(age_mod_me)
 anova(age_mod_m,age_mod_me)
 
 #because it seems there is a problem to display the 95CI with models using 
-#the curveid parameter, #we plot the different modality separately
+#the 'curveid' parameter, we plot the different modalities separately
 age_mod_m24<-drm(dead/total~dose,weights=total,
                  data=agedata_m[agedata_m$age=="0-24h",],
                  fct=LN.3u(),

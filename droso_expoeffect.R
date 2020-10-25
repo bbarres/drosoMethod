@@ -20,9 +20,13 @@ expodata$exposition<-factor(expodata$exposition,
 #because there is a strong effect of sex and we are mainly interested in the
 #effect on the female, we split the dataset according to sex
 expodata_f<-expodata[expodata$sex=="female",]
+expodata_m<-expodata[expodata$sex=="male",]
+
+#female data split by repetitions
 rep1<-expodata_f[expodata_f$date=="09/09/20",]
 rep2<-expodata_f[expodata_f$date=="30/09/20",]
 rep3<-expodata_f[expodata_f$date=="01/10/20",]
+#female data split by time of exposure
 expo1<-expodata_f[expodata_f$exposition=="1h",]
 expo2<-expodata_f[expodata_f$exposition=="2h",]
 expo3<-expodata_f[expodata_f$exposition=="3h",]
@@ -33,14 +37,6 @@ expo21<-expodata_f[expodata_f$exposition=="21h",]
 expo22<-expodata_f[expodata_f$exposition=="22h",]
 expo23<-expodata_f[expodata_f$exposition=="23h",]
 expo24<-expodata_f[expodata_f$exposition=="24h",]
-
-expodata_m<-expodata[expodata$sex=="male",]
-
-#loading the data of an example of evolution of the death rate at the dose 
-#0.25mg/L
-data_expo<-read.table("data/droso_expo.txt",header=TRUE,sep="\t")
-data_expo<-t(data_expo[,c(6:3,1)])
-colnames(data_expo)<-data_expo[5,]
 
 
 ##############################################################################/
@@ -66,9 +62,47 @@ compParm(metaexpo,"e")
 
 
 ##############################################################################/
-#testing the difference between replicates for the different exposure times####
+#Graphical comparisons of the replicates by date####
 ##############################################################################/
 
+op<-par(mfrow=c(3,1))
+#fitting the "null hypothesis model" rep1
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=rep1,
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
+     main="rep1 - 09/09/20",bp=0.001)
+
+#fitting the "null hypothesis model" rep2
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=rep2,
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
+     main="rep2 - 30/09/20")
+
+#fitting the "null hypothesis model" rep3
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=rep3,
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
+     main="rep3 - 01/10/20")
+par(op)
+
+
+##############################################################################/
+#testing the difference between repetition for the different exposure times####
+##############################################################################/
+
+#Here we compare the LD50 dose estimates between the different repetitions
 #because we are performing 30 tests, we apply the bonferonni correction to 
 #the p-value leading to a corrected p-value of 0.0016 (=0.05/30)
 expo_mod1<-drm(dead/total~dose,date,
@@ -141,6 +175,9 @@ expo_mod24<-drm(dead/total~dose,date,
                 type="binomial")
 compParm(expo_mod24,"e") #0 significant
 
+#the different repetitions are resulting in similar ED50 estimates. Therefore
+#we pool all the repetitions for the final analyses
+
 
 ##############################################################################/
 #Effect of the exposure on the LD50 estimation: female####
@@ -177,59 +214,13 @@ summary(expo_mod1b)
 plot(expo_mod1b,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
 anova(expo_mod1b,expo_mod0) #there is a significant effect of the LD50
 
-#comparing the LD50 between the different time of exposure on the full model
+#comparing the LD50 between the different time of exposure on the null 
+#hypothesis model
 compParm(expo_mod0,"e")
-exporez_f<-ED(expo_mod0,50,interval="delta",reference="control")
-op<-par(mar=c(5.1,5.1,4.1,2.1))
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),lwd=1.5,
-     legendPos=c(15,0.7),xlab="dose (mg/L)",cex.axis=1.5,cex.lab=2,cex=2)
-arrows(x0=expo_mod0$parmMat[2,1],y0=0.5,
-       x1=expo_mod0$parmMat[2,5],y1=0.5,
-       length=0.12,angle=25,lwd=3)
-par(op)
-
-#export to pdf 7 x 7 inches
 
 
 ##############################################################################/
-#Effect of the exposure on the LD50 estimation: female by rep####
-##############################################################################/
-
-op<-par(mfrow=c(3,1))
-#fitting the "null hypothesis model" rep1
-expo_mod0<-drm(dead/total~dose,exposition,
-               weights=total,
-               data=rep1,
-               fct=LN.2(),
-               type="binomial")
-summary(expo_mod0)
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
-     main="rep1 - 09/09/20",bp=0.001)
-
-#fitting the "null hypothesis model" rep2
-expo_mod0<-drm(dead/total~dose,exposition,
-               weights=total,
-               data=rep2,
-               fct=LN.2(),
-               type="binomial")
-summary(expo_mod0)
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
-     main="rep2 - 30/09/20")
-
-#fitting the "null hypothesis model" rep3
-expo_mod0<-drm(dead/total~dose,exposition,
-               weights=total,
-               data=rep3,
-               fct=LN.2(),
-               type="binomial")
-summary(expo_mod0)
-plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30),
-     main="rep3 - 01/10/20")
-par(op)
-
-
-##############################################################################/
-#Figure 6: final plots exemplifying effect of time of exposure
+#Figure 6: final plots exemplifying effect of time of exposure####
 ##############################################################################/
 
 #fitting the "null hypothesis model"
