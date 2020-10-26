@@ -20,7 +20,7 @@ sexdata<-aggregate(cbind(dead,total)~dose+sex,data=sexdata,"sum")
 sexdata_f<-sexdata[sexdata$sex=="female",]
 sexdata_m<-sexdata[sexdata$sex=="male",]
 
-#let's do a model for every repetition
+#let's do a model for every bioassays combined
 sex_mod<-drm(dead/total~dose,weights=total,
              data=sexdata,curveid=sex,
              fct=LN.3u(),
@@ -73,6 +73,7 @@ plot(sex_mod_m,type="obs",add=TRUE,pch=24,cex=2,
      col=rgb(0,0,0,0.3),bg=rgb(0,0,0,0.0))
 title(xlab="Dose (mg/l)",ylab="Mortality rate",cex.lab=2,font.lab=2)
 par(op)
+
 #export to pdf 10*7 inches
 
 
