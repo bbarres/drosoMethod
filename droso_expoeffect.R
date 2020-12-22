@@ -176,7 +176,7 @@ expo_mod24<-drm(dead/total~dose,date,
 compParm(expo_mod24,"e") #0 significant
 
 #the different repetitions are resulting in similar ED50 estimates. Therefore
-#we pool all the repetitions for the final analyses
+#we pool all the repetitions for the final analyses in the next section
 
 
 ##############################################################################/
@@ -216,6 +216,21 @@ anova(expo_mod1b,expo_mod0) #there is a significant effect of the LD50
 
 #comparing the LD50 between the different time of exposure on the null 
 #hypothesis model
+compParm(expo_mod0,"e")
+
+
+##############################################################################/
+#Effect of the exposure on the LD50 estimation: male####
+##############################################################################/
+
+#fitting the "null hypothesis model"
+expo_mod0<-drm(dead/total~dose,exposition,
+               weights=total,
+               data=expodata_m,
+               fct=LN.2(),
+               type="binomial")
+summary(expo_mod0)
+plot(expo_mod0,col=c(1,1,1,1,1,2,2,2,2,2),xlim=c(0,30))
 compParm(expo_mod0,"e")
 
 
