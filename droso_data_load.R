@@ -23,9 +23,7 @@ library(RColorBrewer)
 #load the dataset
 dataDroz<-read.table("data/droso_data.txt",header=T,sep="\t",
                      stringsAsFactors=TRUE)
-# #we remove the two concentrations that were used at the beginning of the 
-# #test when we were still adjusting the range of doses for the test
-# dataDroz<-dataDroz[dataDroz$dose!=603.70 & dataDroz$dose!=301.85,]
+
 #creation of variable to distinguish between male and female and time 
 #of exposure to pesticide
 dataDroz<-cbind(dataDroz,"repet"=paste(dataDroz$date,dataDroz$sex, 
