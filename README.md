@@ -1,5 +1,5 @@
 [![DOI](https://zenodo.org/badge/119716271.svg)](https://zenodo.org/badge/latestdoi/119716271)
-# Supporting data and code for: How to create a reliable and reproducible insecticide resistance bioassay: an example on the worldwide invasive pest, *Drosophila suzukii*.
+# Supporting data and code for: How varying parameters impact insecticide resistance bioassay: an example on the worldwide invasive pest *Drosophila suzukii*.
 *This repository contains the R code used for the data analyses and production of the figures of the related article*
 
 ![alt text](https://j2ejmg.db.files.1drv.com/y4mfs0HpAp-0lm3RXzqAl_6ox6ANJQa-eeY3mIva0J6-lCC_iOKhirczqHbvFa1CbVb0zPHC62CYNYdRDSlUcYTQsepfEoC7Rmwm5mL_yKFWTqgLlbRiQ8RWuDxwEzTYUQqne5s6Sj7aI_ky82MSBhwN4rsbfdgoEmAVv7WUUCsUatxVesPePWVoVl-Sv0hMsYnAh5W2h4q5jLprGqbSMofWQ?width=1584&height=588&cropmode=none)
@@ -45,7 +45,7 @@ There are three datasets used in this study. The files can be found in the "data
 ## Citation
 You will soon be able (hopefully) to cite the related study as follow: 
 + Blouquy L., Mottet C., Olivares J., Plantamp C., Siegwart M. and Barrès B.
-[How to create a reliable and reproducible insecticide resistance bioassay: an example on the worldwide invasive pest, *Drosophila suzukii*. *Submitted*]()
+[How varying parameters impact insecticide resistance bioassay: an example on the worldwide invasive pest *Drosophila suzukii*. *Accepted for publication in PLOS ONE*.]()
 
 If you want to use (some of) the code found on this page or if you want to cite this repository:
-+ Benoit Barrès. bbarres/drosoMethod: [Supporting data and code for: How to create a reliable and reproducible insecticide resistance bioassay: an example on the worldwide invasive pest, *Drosophila suzukii*. Zenodo; 2019.](https://zenodo.org/badge/latestdoi/119716271)
++ Benoit Barrès. bbarres/drosoMethod: [Supporting data and code for: How varying parameters impact insecticide resistance bioassay: an example on the worldwide invasive pest *Drosophila suzukii*. Zenodo; 2019.](https://zenodo.org/badge/latestdoi/119716271)
