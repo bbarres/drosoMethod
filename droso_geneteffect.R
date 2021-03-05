@@ -94,7 +94,7 @@ genD_mod_m_isa<-drm(dead/total~dose,weights=total,
 
 
 ##############################################################################/
-#Code for plotting the Figure 4####
+#Code for plotting Figure 4####
 ##############################################################################/
 
 #code for the plot comparing the different populations with different

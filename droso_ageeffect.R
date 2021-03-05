@@ -84,7 +84,7 @@ age_mod_m96<-drm(dead/total~dose,weights=total,
 
 
 ##############################################################################/
-#Code for plotting the Figure 2####
+#Code for plotting Figure 2####
 ##############################################################################/
 
 #code for the plot comparing the different age categories of the same
