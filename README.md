@@ -45,7 +45,7 @@ There are three datasets used in this study. The files can be found in the "data
 ## Citation
 You will soon be able (hopefully) to cite the related study as follow: 
 + Blouquy L., Mottet C., Olivares J., Plantamp C., Siegwart M. and Barrès B.
-[How varying parameters impact insecticide resistance bioassay: an example on the worldwide invasive pest *Drosophila suzukii*. *Accepted for publication in PLOS ONE*.]()
+[How varying parameters impact insecticide resistance bioassay: an example on the worldwide invasive pest *Drosophila suzukii*. *PLOS ONE*, 16: e0247756, 2021. doi:10.1371/journal.pone.0247756.](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0247756)
 
 If you want to use (some of) the code found on this page or if you want to cite this repository:
 + Benoit Barrès. bbarres/drosoMethod: [Supporting data and code for: How varying parameters impact insecticide resistance bioassay: an example on the worldwide invasive pest *Drosophila suzukii*. Zenodo; 2019.](https://zenodo.org/badge/latestdoi/119716271)
